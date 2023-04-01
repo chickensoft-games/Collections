@@ -20,7 +20,7 @@ on:
 
 jobs:
   check_if_should_release:
-    name: 🦾 Release Dependency Updates
+    name: 🦾 Auto-Release
     runs-on: ubuntu-latest
     outputs:
       should_release: ${{ steps.release.outputs.changed }}
