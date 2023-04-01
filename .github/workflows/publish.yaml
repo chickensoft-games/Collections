@@ -47,7 +47,7 @@ jobs:
         with:
           project-version: ${{ steps.current-version.outputs.version }}
           godot-version: 4.0.1
-          bump: ${{ github.event.inputs.bump }}
+          bump: ${{ inputs.bump }}
 
       - name: ✨ Print Next Version
         run: |

@@ -47,10 +47,6 @@ jobs:
             echo "Dependencies not updated: skipping release."
           fi
 
-      - name: 🖨 Print Last Commit Message
-        if: ${{ steps.tests.outputs.passed == 'true' }}
-        run: echo ${{ steps.last_commit.outputs.message }}
-
   release:
     uses: './.github/workflows/publish.yaml'
     needs: check_if_should_release
