@@ -1,0 +1,17 @@
+name: '➡️ Release'
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - 'v*'
+
+jobs:
+  release:
+    name: ➡️ Release
+    runs-on: ubuntu-latest
+    steps:
+      - name: ✨ Create Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh release create --generate-notes "$GITHUB_REF_NAME" # GITHUB_REF_NAME = tag name

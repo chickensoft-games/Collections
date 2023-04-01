@@ -1,33 +1,72 @@
-name: '📦 Publish to Nuget'
+name: '📦 Publish'
 on:
-  # You must manually run this if you want to publish a new version to nuget.
   workflow_dispatch:
+    branches:
+      - main
+    inputs:
+      bump:
+        description: "Version Bump Method"
+        type: choice
+        options:
+          - major
+          - minor
+          - patch
+        required: true
 
 jobs:
   publish:
-    name: '📦 Publish to Nuget'
+    name: 📦 Publish
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-        name: 🧾 Checkout
+      - name: 🧾 Checkout
+        uses: actions/checkout@v3
+        with:
+          lfs: true
+          submodules: 'recursive'
+
+      - name: 🔎 Read Current Project Verson
+        uses: KageKirin/get-csproj-version@v0
+        id: current-version
+        with:
+          file: Chickensoft.GoDotCollections/Chickensoft.GoDotCollections.csproj
+
+      - name: 🧮 Compute Next Version
+        uses:  chickensoft-games/next-godot-csproj-version@1
+        id: next-version
+        with:
+          project-version: ${{ steps.test.current-version.version }}
+          godot-version: 4.0.1
+          bump: ${{ github.event.inputs.bump }}
+
+      - name: 📝 Change Version
+        uses: vers-one/dotnet-project-version-updater@v1.3
+        with:
+          file: "Chickensoft.GoDotCollections/Chickensoft.GoDotCollections.csproj"
+          version:  ${{ steps.test.next-version.version }}
+
+      - name: ✍️ Commit Changes
+        run: |
+          git config user.name "action@github.com"
+          git config user.email "GitHub Action"
+          git add .
+          git commit -m "chore(version): update version to ${{ steps.test.next-version.version }}"
+          git tag -a "v${{ steps.test.next-version.version }}" -m "Version ${{ steps.test.next-version.version }}"
+          git push --follow-tags
 
       - uses: actions/setup-dotnet@v3
         name: 💽 Setup .NET SDK
         with:
-          # Use the .NET SDK from global.json in the root of the repository.
-          global-json-file: global.json
-      
+          version: 6.0.407
+
       - name: 📦 Publish
-        id: publish_nuget
         run: |
           # build the package
           dotnet build Chickensoft.GoDotCollections/Chickensoft.GoDotCollections.csproj -c Release
-          
+
           # find the built nuget package
           nuget_package=$(find . -name "Chickensoft.GoDotCollections.*.nupkg")
-          
+
           echo "📦 Publishing package: $nuget_package"
-          
+
           # publish the nuget package
           dotnet nuget push "$nuget_package" --api-key ${{ secrets.NUGET_API_KEY }}  --source https://api.nuget.org/v3/index.json --skip-duplicate
-    
