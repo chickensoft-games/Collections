@@ -42,7 +42,7 @@ jobs:
           #
           # This allows checks on renovatebot PR's to succeed whenever
           # renovatebot updates the Godot SDK version.
-          version: global.json
+          version: 4.0.1
 
       - name: 🔬 Verify Setup
         run: |
