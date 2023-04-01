@@ -25,26 +25,27 @@ jobs:
           submodules: 'recursive'
 
       - name: 🔎 Read Current Project Verson
-        uses: KageKirin/get-csproj-version@v0
+        uses: mavrosxristoforos/get-xml-info@1.0
         id: current-version
         with:
-          file: Chickensoft.GoDotCollections/Chickensoft.GoDotCollections.csproj
+          xml-file: Chickensoft.GoDotCollections/Chickensoft.GoDotCollections.csproj
+          xpath: /Project/PropertyGroup/Version
 
       - name: 🖨 Print Current Version
         run: |
-          echo "Current Version: ${{ steps.current-version.version }}"
+          echo "Current Version: ${{ steps.current-version.info }}"
 
       - name: 🧮 Compute Next Version
         uses:  chickensoft-games/next-godot-csproj-version@v1
         id: next-version
         with:
-          project-version: ${{ steps.test.current-version.version }}
+          project-version: ${{ steps.test.current-version.info }}
           godot-version: 4.0.1
           bump: ${{ github.event.inputs.bump }}
 
       - name: ✨ Print Next Version
         run: |
-          echo "Current Version: ${{ steps.current-version.version }}"
+          echo "Next Version: ${{ steps.next-version.version }}"
 
       - name: 📝 Change Version
         uses: vers-one/dotnet-project-version-updater@v1.3
