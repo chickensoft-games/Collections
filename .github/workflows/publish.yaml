@@ -1,0 +1,33 @@
+name: '📦 Publish to Nuget'
+on:
+  # You must manually run this if you want to publish a new version to nuget.
+  workflow_dispatch:
+
+jobs:
+  publish:
+    name: '📦 Publish to Nuget'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        name: 🧾 Checkout
+
+      - uses: actions/setup-dotnet@v3
+        name: 💽 Setup .NET SDK
+        with:
+          # Use the .NET SDK from global.json in the root of the repository.
+          global-json-file: global.json
+      
+      - name: 📦 Publish
+        id: publish_nuget
+        run: |
+          # build the package
+          dotnet build Chickensoft.GoDotCollections/Chickensoft.GoDotCollections.csproj -c Release
+          
+          # find the built nuget package
+          nuget_package=$(find . -name "Chickensoft.GoDotCollections.*.nupkg")
+          
+          echo "📦 Publishing package: $nuget_package"
+          
+          # publish the nuget package
+          dotnet nuget push "$nuget_package" --api-key ${{ secrets.NUGET_API_KEY }}  --source https://api.nuget.org/v3/index.json --skip-duplicate
+    
