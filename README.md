@@ -37,3 +37,4 @@ A typed facade over `OrderedDictionary`. Provides a basic mechanism to store str
 [branch-coverage]: Chickensoft.GoDotCollections.Tests/badges/branch_coverage.svg
 
 <!-- Article -->
+
