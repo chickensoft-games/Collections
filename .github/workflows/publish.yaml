@@ -65,7 +65,7 @@ jobs:
       - uses: actions/setup-dotnet@v3
         name: 💽 Setup .NET SDK
         with:
-          version: 6.0.407
+          dotnet-version: 6.0.407
 
       - name: 📦 Publish
         run: |
