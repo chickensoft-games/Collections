@@ -27,7 +27,7 @@ jobs:
         uses: actions/setup-dotnet@v3
         with:
           # Use the .NET SDK from global.json in the root of the repository.
-          global-json-file: global.json
+          version: 6.0.407
 
       - name: 📦 Restore Dependencies
         run: dotnet restore
