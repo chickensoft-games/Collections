@@ -32,14 +32,9 @@ jobs:
       - name: 📄 Determine If Dependencies Have Changed
         id: release
         run: |
-          # renovate bot always uses a certain commit message when dependencies
-          # are updated.
-          #
-          # if we see this phrase, we know we can release and publish
-          # an update. this is useful for staying up-to-date with the latest
-          # godot releases.
+          message=$(git log -1 --pretty=%B)
 
-          if [[ ${{ github.event.head_commit.message }} == *"chore(deps): update all dependencies"* ]]; then
+          if [[ $message == *"chore(deps): update all dependencies"* ]]; then
             echo "changed=true" >> "$GITHUB_OUTPUT"
             echo "Dependencies updated: automatically releasing!"
           else
