@@ -12,6 +12,12 @@ on:
           - minor
           - patch
         required: true
+  workflow_call:
+    inputs:
+      bump:
+        description: "Version Bump Method"
+        type: string
+        required: true
 
 jobs:
   publish:

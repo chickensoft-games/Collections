@@ -1,0 +1,58 @@
+# This workflow automatically looks for pushes to main whose last commit
+# message contains the phrase "chore(deps): update all dependencies".
+# If it finds such a commit, and the testing workflow has passed, it will
+# automatically release a new version of the project by running the publish
+# workflow.
+#
+# The commit message phrase above is always used by renovatebot when opening
+# PR's to update dependencies. If you have renovatebot enabled and set to
+# automatically merge in dependency updates, this can automatically release and
+# publish the updated version of the project.
+
+name: 🦾 Auto-Release
+on:
+  workflow_run:
+    workflows: ["🚥 Tests"]
+    branches:
+      - main
+    types:
+      - completed
+
+jobs:
+  check_if_should_release:
+    name: 🦾 Release Dependency Updates
+    runs-on: ubuntu-latest
+    outputs:
+      should_release: ${{ steps.release.outputs.changed }}
+    steps:
+      - name: 🧐 Make Sure Tests Passed
+        if: ${{ github.event.workflow_run.conclusion != 'success' }}
+        run: exit 1
+
+      - name: 📄 Determine If Dependencies Have Changed
+        id: release
+        run: |
+          # renovate bot always uses a certain commit message when dependencies
+          # are updated.
+          #
+          # if we see this phrase, we know we can release and publish
+          # an update. this is useful for staying up-to-date with the latest
+          # godot releases.
+
+          if [[ ${{ github.event.head_commit.message }} == *"chore(deps): update all dependencies"* ]]; then
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+            echo "Dependencies updated: automatically releasing!"
+          else
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            echo "Dependencies not updated: skipping release."
+          fi
+
+      - name: 🖨 Print Last Commit Message
+        run: echo ${{ steps.last_commit.outputs.message }}
+
+  release:
+    uses: '.github/workflows/publish.yaml@main'
+    needs: check_if_should_release
+    if: ${{ needs.check_if_should_release.outputs.should_release == 'true' }}
+    with:
+      bump: patch
