@@ -23,17 +23,19 @@ jobs:
     name: 🦾 Auto-Release
     runs-on: ubuntu-latest
     outputs:
-      should_release: ${{ steps.release.outputs.changed }}
+      should_release: ${{ steps.tests.outputs.passed && steps.release.outputs.changed }}
     steps:
       - name: 🧾 Checkout
         uses: actions/checkout@v3
 
-      - name: 🧐 Make Sure Tests Passed
-        if: ${{ github.event.workflow_run.conclusion != 'success' }}
-        run: exit 1
+      - name: 🧐 Check Tests Workflow
+        id: tests
+        run:
+          echo "passed=${{ github.event.workflow_run.conclusion == 'success' }}" >> "$GITHUB_OUTPUT"
 
       - name: 📄 Determine If Dependencies Have Changed
         id: release
+        if: ${{ steps.tests.outputs.passed == 'true' }}
         run: |
           message=$(git log -1 --pretty=%B)
 
@@ -46,6 +48,7 @@ jobs:
           fi
 
       - name: 🖨 Print Last Commit Message
+        if: ${{ steps.tests.outputs.passed == 'true' }}
         run: echo ${{ steps.last_commit.outputs.message }}
 
   release:
