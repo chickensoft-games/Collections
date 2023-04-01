@@ -1,0 +1,18 @@
+name: 🦾 Release Dependency Updates
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  release_dependency_updates:
+    name: 🦾 Release Dependency Updates
+    runs-on: ubuntu-latest
+    steps:
+      - name: 📄 Read Last Commit Message
+        id: last_commit
+        run: |
+          echo "message=$(git log -1 --pretty=%B)" >> $GITHUB_OUTPUT
+
+      - name: 🖨 Print Last Commit Message
+        run: echo ${{ steps.last_commit.outputs.message }}
