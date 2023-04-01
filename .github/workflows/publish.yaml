@@ -30,6 +30,10 @@ jobs:
         with:
           file: Chickensoft.GoDotCollections/Chickensoft.GoDotCollections.csproj
 
+      - name: 🖨 Print Current Version
+        run: |
+          echo "Current Version: ${{ steps.current-version.version }}"
+
       - name: 🧮 Compute Next Version
         uses:  chickensoft-games/next-godot-csproj-version@v1
         id: next-version
@@ -37,6 +41,10 @@ jobs:
           project-version: ${{ steps.test.current-version.version }}
           godot-version: 4.0.1
           bump: ${{ github.event.inputs.bump }}
+
+      - name: ✨ Print Next Version
+        run: |
+          echo "Current Version: ${{ steps.current-version.version }}"
 
       - name: 📝 Change Version
         uses: vers-one/dotnet-project-version-updater@v1.3
