@@ -25,6 +25,9 @@ jobs:
     outputs:
       should_release: ${{ steps.release.outputs.changed }}
     steps:
+      - name: 🧾 Checkout
+        uses: actions/checkout@v3
+
       - name: 🧐 Make Sure Tests Passed
         if: ${{ github.event.workflow_run.conclusion != 'success' }}
         run: exit 1
