@@ -31,7 +31,7 @@ jobs:
           file: Chickensoft.GoDotCollections/Chickensoft.GoDotCollections.csproj
 
       - name: 🧮 Compute Next Version
-        uses:  chickensoft-games/next-godot-csproj-version@1
+        uses:  chickensoft-games/next-godot-csproj-version@v1
         id: next-version
         with:
           project-version: ${{ steps.test.current-version.version }}
