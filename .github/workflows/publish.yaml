@@ -13,6 +13,10 @@ on:
           - patch
         required: true
   workflow_call:
+    secrets:
+      NUGET_API_KEY:
+        description: "NuGet API Key"
+        required: true
     inputs:
       bump:
         description: "Version Bump Method"
@@ -87,4 +91,4 @@ jobs:
           echo "📦 Publishing package: $nuget_package"
 
           # publish the nuget package
-          dotnet nuget push "$nuget_package" --api-key ${{ secrets.NUGET_API_KEY }}  --source https://api.nuget.org/v3/index.json --skip-duplicate
+          dotnet nuget push "$nuget_package" --api-key "${{ secrets.NUGET_API_KEY }}" --source "https://api.nuget.org/v3/index.json" --skip-duplicate
