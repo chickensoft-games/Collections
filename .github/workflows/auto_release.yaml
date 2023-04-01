@@ -51,7 +51,7 @@ jobs:
         run: echo ${{ steps.last_commit.outputs.message }}
 
   release:
-    uses: '.github/workflows/publish.yaml@main'
+    uses: './.github/workflows/publish.yaml@main'
     needs: check_if_should_release
     if: ${{ needs.check_if_should_release.outputs.should_release == 'true' }}
     with:
