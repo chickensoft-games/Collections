@@ -456,3 +456,5 @@ dotnet_diagnostic.RCS1161.severity = none
 dotnet_diagnostic.RCS1165.severity = none
 # Allow keyword-based names so that parameter names like `@event` can be used.
 dotnet_diagnostic.CA1716.severity = none
+# Let me put comments where I like
+dotnet_diagnostic.RCS1181.severity = none

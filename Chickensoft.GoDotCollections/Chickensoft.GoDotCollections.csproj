@@ -4,6 +4,7 @@
     <EnableDynamicLoading>true</EnableDynamicLoading>
     <LangVersion>preview</LangVersion>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <Nullable>enable</Nullable>
     <CopyAllFiles>true</CopyAllFiles>
     <RootNamespace>Chickensoft.GoDotCollections</RootNamespace>
@@ -12,7 +13,7 @@
     <DebugType>portable</DebugType>
 
     <Title>Chickensoft.GoDotCollections</Title>
-    <Version>1.3.4</Version>
+    <Version>1.4.0</Version>
     <Description>Chickensoft's collections collection.</Description>
     <Copyright>© 2023 Chickensoft</Copyright>
     <Authors>Chickensoft</Authors>
@@ -37,5 +38,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="SauceControl.InheritDoc" Version="1.3.0">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
   </ItemGroup>
 </Project>
