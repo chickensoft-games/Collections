@@ -41,21 +41,18 @@ jobs:
           submodules: 'recursive'
 
       - name: 🔎 Read Current Project Verson
-        uses: KageKirin/get-csproj-version@v1.0.0
         id: current-version
-        with:
-          file: Chickensoft.GoDotCollections/Chickensoft.GoDotCollections.csproj
-          xpath: /Project/PropertyGroup/Version
+        uses: battila7/get-version-action@v2
 
       - name: 🖨 Print Current Version
         run: |
-          echo "Current Version: ${{ steps.current-version.outputs.version }}"
+          echo "Current Version: ${{ steps.current-version.outputs.version-without-v }}"
 
       - name: 🧮 Compute Next Version
         uses:  chickensoft-games/next-godot-csproj-version@v1
         id: next-version
         with:
-          project-version: ${{ steps.current-version.outputs.version }}
+          project-version: ${{ steps.current-version.outputs.version-without-v }}
           godot-version: global.json
           bump: ${{ github.event.inputs.bump }}
 
