@@ -39,20 +39,23 @@ jobs:
           token: ${{ secrets.GH_BASIC }}
           lfs: true
           submodules: 'recursive'
+          fetch-depth: 0 # So we can get all tags.
 
       - name: 🔎 Read Current Project Verson
         id: current-version
-        uses: battila7/get-version-action@v2
+        uses: WyriHaximus/github-action-get-previous-tag@v1
+        with:
+          fallback: "0.0.0-devbuild"
 
       - name: 🖨 Print Current Version
         run: |
-          echo "Current Version: ${{ steps.current-version.outputs.version-without-v }}"
+          echo "Current Version: ${{ steps.current-version.outputs.tag }}"
 
       - name: 🧮 Compute Next Version
-        uses:  chickensoft-games/next-godot-csproj-version@v1
+        uses: chickensoft-games/next-godot-csproj-version@v1
         id: next-version
         with:
-          project-version: ${{ steps.current-version.outputs.version-without-v }}
+          project-version: ${{ steps.current-version.outputs.tag }}
           godot-version: global.json
           bump: ${{ github.event.inputs.bump }}
 
