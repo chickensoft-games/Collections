@@ -1,0 +1,88 @@
+name: '📦 Release'
+on:
+  # Make a release whenever we push a version tag.
+  push:
+    tags:
+      - 'v*'
+  # Make a release whenever the developer wants.
+  workflow_dispatch:
+    inputs:
+      bump:
+        type: string
+        description: "major, minor, or patch"
+        required: true
+        default: "patch"
+  # Make a release whenever we're told to by another workflow.
+  workflow_call:
+    secrets:
+      NUGET_API_KEY:
+        description: "API key for Nuget"
+        required: true
+      GH_BASIC:
+        description: "PAT"
+        required: true
+    # Input unifies with the workflow dispatch since it's identical.
+    inputs:
+      bump:
+        type: string
+        description: "major, minor, or patch"
+        required: true
+        default: "patch"
+jobs:
+  release:
+    name: '📦 Release'
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🧾 Checkout
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GH_BASIC }}
+          lfs: true
+          submodules: 'recursive'
+
+      - name: 🔎 Read Current Project Verson
+        uses: KageKirin/get-csproj-version@v1.0.0
+        id: current-version
+        with:
+          file: Chickensoft.GoDotCollections/Chickensoft.GoDotCollections.csproj
+          xpath: /Project/PropertyGroup/Version
+
+      - name: 🖨 Print Current Version
+        run: |
+          echo "Current Version: ${{ steps.current-version.outputs.version }}"
+
+      - name: 🧮 Compute Next Version
+        uses:  chickensoft-games/next-godot-csproj-version@v1
+        id: next-version
+        with:
+          project-version: ${{ steps.current-version.outputs.version }}
+          godot-version: global.json
+          bump: ${{ github.event.inputs.bump }}
+
+      - uses: actions/setup-dotnet@v3
+        name: 💽 Setup .NET SDK
+        with:
+          # Use the .NET SDK from global.json in the root of the repository.
+          global-json-file: global.json
+
+      - name: 📦 Build
+        run: dotnet build Chickensoft.GoDotCollections/Chickensoft.GoDotCollections.csproj -c Release
+
+      - name: 🔎 Get Package Path
+        id: package-path
+        run: |
+          package=$(find ./Chickensoft.GoDotCollections/nupkg -name "*.nupkg")
+          echo "package=$package" >> "$GITHUB_OUTPUT"
+          echo "📦 Found package: $package"
+
+      - name: ✨ Create Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_BASIC }}
+        run: |
+          version="v${{ steps.next-version.outputs.version }}"
+          gh release create --title "$version" --generate-notes "$version" \
+            "${{ steps.package-path.outputs.package }}"
+
+      - name: 🛜 Publish to Nuget
+        run: |
+          dotnet nuget push "${{ steps.package-path.outputs.package }}" --api-key "${{ secrets.NUGET_API_KEY }}" --source "https://api.nuget.org/v3/index.json" --skip-duplicate

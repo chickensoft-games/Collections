@@ -14,7 +14,7 @@
 # You can disable this action by setting the DISABLE_AUTO_RELEASE repository
 # variable to true.
 
-name: 🦾 Auto-Release
+name: '🦾 Auto-Release'
 on:
   workflow_run:
     workflows: ["🚥 Tests"]
@@ -31,7 +31,11 @@ jobs:
       should_release: ${{ steps.release.outputs.should_release }}
     steps:
       - name: 🧾 Checkout
-        uses: actions/checkout@1d96c772d19495a3b5c517cd2bc0cb401ea0529f # v4
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GH_BASIC }}
+          lfs: true
+          submodules: 'recursive'
 
       - name: 🧑‍🔬 Check Test Results
         id: tests
@@ -65,11 +69,12 @@ jobs:
             echo "✋ Not creating a release."
           fi
 
-  release:
-    uses: './.github/workflows/publish.yaml'
+  trigger_release:
+    uses: './.github/workflows/release.yaml'
     needs: auto_release
     if: needs.auto_release.outputs.should_release == 'true'
     secrets:
       NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
+      GH_BASIC: ${{ secrets.GH_BASIC }}
     with:
       bump: patch
