@@ -39,31 +39,31 @@ public class Map<TKey, TValue> where TKey : notnull {
   /// <summary>Map enumerator.</summary>
   public IDictionaryEnumerator GetEnumerator() => _collection.GetEnumerator();
   /// <summary>Insert a key and value at the specified index.</summary>
-  /// <param name="index"></param>
-  /// <param name="key"></param>
-  /// <param name="value"></param>
+  /// <param name="index">Index to insert to.</param>
+  /// <param name="key">Key.</param>
+  /// <param name="value">Value.</param>
   public void Insert(int index, TKey key, TValue value)
     => _collection.Insert(index, key, value);
   /// <summary>Remove a key/value pair at the specified index.</summary>
-  /// <param name="index"></param>
+  /// <param name="index">Index to remove from.</param>
   public void RemoveAt(int index) => _collection.RemoveAt(index);
   /// <summary>True if the given key is in the map.</summary>
-  /// <param name="key"></param>
+  /// <param name="key">Key.</param>
   public bool Contains(TKey key) => _collection.Contains(key);
   /// <summary>Adds or updates a key/value pair to the map.</summary>
-  /// <param name="key"></param>
-  /// <param name="value"></param>
+  /// <param name="key">Key.</param>
+  /// <param name="value">Value.</param>
   public void Add(TKey key, TValue value) => _collection.Add(key, value);
   /// <summary>Removes all entries from the map.</summary>
   public void Clear() => _collection.Clear();
   /// <summary>Remove a key/value pair from the map.</summary>
-  /// <param name="key"></param>
+  /// <param name="key">Key.</param>
   public void Remove(TKey key) => _collection.Remove(key);
   /// <summary>
   /// Copy the map to an array, beginning at the given index.
   /// </summary>
-  /// <param name="array"></param>
-  /// <param name="index"></param>
+  /// <param name="array">Destination array.</param>
+  /// <param name="index">Start index.</param>
   public void CopyTo(Array array, int index)
     => _collection.CopyTo(array, index);
 }
