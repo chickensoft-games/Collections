@@ -19,10 +19,10 @@
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Chickensoft.GoDotTest" Version="1.1.2-beta.4.0.0.17" />
+    <PackageReference Include="Chickensoft.GoDotTest" Version="1.5.2" />
     <!-- Bring your own assertion library for tests! -->
     <!-- We're using Shouldly for this example, but you can use anything. -->
-    <PackageReference Include="Shouldly" Version="4.1.0" />
+    <PackageReference Include="Shouldly" Version="4.2.1" />
     <!-- LightMock is a mocking library that can run without reflection. -->
     <PackageReference Include="LightMock.Generator" Version="1.2.2" />
     <!-- LightMoq is a Chickensoft package which makes it more like Moq. -->
