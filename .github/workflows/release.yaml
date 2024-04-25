@@ -59,7 +59,7 @@ jobs:
           godot-version: global.json
           bump: ${{ github.event.inputs.bump }}
 
-      - uses: actions/setup-dotnet@v3
+      - uses: actions/setup-dotnet@v4
         name: 💽 Setup .NET SDK
         with:
           # Use the .NET SDK from global.json in the root of the repository.
