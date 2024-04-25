@@ -47,7 +47,7 @@ jobs:
         run: |
           message=$(git log -1 --pretty=%B)
 
-          if [[ $message == *"chore(deps): update all dependencies"* ]]; then
+          if [[ $message == *"chore(deps)"* ]]; then
             echo "changed=true" >> "$GITHUB_OUTPUT"
           else
             echo "changed=false" >> "$GITHUB_OUTPUT"
