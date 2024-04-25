@@ -88,8 +88,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GH_BASIC }}
         run: |
-          version="v${{ steps.next-version.outputs.version }}"
-          gh release create --title "$version" --generate-notes "$version" \
+          version="${{ steps.next-version.outputs.version }}"
+          gh release create --title "v$version" --generate-notes "$version" \
             "${{ steps.package-path.outputs.package }}"
 
       - name: 🛜 Publish to Nuget
