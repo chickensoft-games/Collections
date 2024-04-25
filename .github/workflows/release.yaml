@@ -65,6 +65,15 @@ jobs:
           # Use the .NET SDK from global.json in the root of the repository.
           global-json-file: global.json
 
+      # Write version to file so .NET will build correct version.
+      - name: 📝 Write Version to File
+        uses: jacobtomlinson/gha-find-replace@v3
+        with:
+          find: "0.0.0-devbuild"
+          replace: ${{ steps.next-version.outputs.version }}
+          regex: false
+          include: GodotTestDriver/GodotTestDriver.csproj
+
       - name: 📦 Build
         run: dotnet build Chickensoft.GoDotCollections/Chickensoft.GoDotCollections.csproj -c Release
 
