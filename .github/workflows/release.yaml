@@ -72,7 +72,7 @@ jobs:
           find: "0.0.0-devbuild"
           replace: ${{ steps.next-version.outputs.version }}
           regex: false
-          include: GodotTestDriver/GodotTestDriver.csproj
+          include: Chickensoft.GoDotCollections/Chickensoft.GoDotCollections.csproj
 
       - name: 📦 Build
         run: dotnet build Chickensoft.GoDotCollections/Chickensoft.GoDotCollections.csproj -c Release
