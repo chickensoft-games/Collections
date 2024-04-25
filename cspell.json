@@ -11,7 +11,7 @@
   ],
   "words": [
     "assemblyfilters",
-    "devbuild",
+    "automerge",
     "branchcoverage",
     "brandedoutcast",
     "buildtransitive",
@@ -21,6 +21,7 @@
     "classfilters",
     "contentfiles",
     "CYGWIN",
+    "devbuild",
     "endregion",
     "Finalizer",
     "Finalizers",
