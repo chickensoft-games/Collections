@@ -1,9 +1,5 @@
 name: '📦 Release'
 on:
-  # Make a release whenever we push a version tag.
-  push:
-    tags:
-      - 'v*'
   # Make a release whenever the developer wants.
   workflow_dispatch:
     inputs:
@@ -72,15 +68,15 @@ jobs:
           find: "0.0.0-devbuild"
           replace: ${{ steps.next-version.outputs.version }}
           regex: false
-          include: Chickensoft.GoDotCollections/Chickensoft.GoDotCollections.csproj
+          include: Chickensoft.Collections/Chickensoft.Collections.csproj
 
       - name: 📦 Build
-        run: dotnet build Chickensoft.GoDotCollections/Chickensoft.GoDotCollections.csproj -c Release
+        run: dotnet build Chickensoft.Collections/Chickensoft.Collections.csproj -c Release
 
       - name: 🔎 Get Package Path
         id: package-path
         run: |
-          package=$(find ./Chickensoft.GoDotCollections/nupkg -name "*.nupkg")
+          package=$(find ./Chickensoft.Collections/nupkg -name "*.nupkg")
           echo "package=$package" >> "$GITHUB_OUTPUT"
           echo "📦 Found package: $package"
 
