@@ -1,15 +1,12 @@
-namespace Chickensoft.GoDotCollections.Tests;
+namespace Chickensoft.Collections.Tests;
 
 using System;
 using System.Collections.Generic;
-using Godot;
-using GoDotCollections;
-using GoDotTest;
+using Chickensoft.Collections;
 using Shouldly;
+using Xunit;
 
-public class NotifierTest : TestClass {
-  public NotifierTest(Node testScene) : base(testScene) { }
-
+public class NotifierTest {
   public static class Utils {
     public static void ClearWeakReference(WeakReference weakReference) {
       weakReference.Target = null;
@@ -22,20 +19,20 @@ public class NotifierTest : TestClass {
     new AutoProp<int>(1)
   );
 
-  [Test]
+  [Fact]
   public void Initializes() {
     var subject = new AutoProp<int>(1);
     subject.Value.ShouldBe(1);
   }
 
-  [Test]
+  [Fact]
   public void InitializesWithComparer() {
     var subject = new AutoProp<int>(1, EqualityComparer<int>.Default);
     subject.Value.ShouldBe(1);
     subject.Comparer.ShouldBe(EqualityComparer<int>.Default);
   }
 
-  [Test]
+  [Fact]
   public void SyncCallsHandlerImmediatelyAndAllowsUnsubscribe() {
     using var subject = new AutoProp<int>(1);
 
@@ -59,7 +56,7 @@ public class NotifierTest : TestClass {
     changedCalled.ShouldBe(1);
   }
 
-  [Test]
+  [Fact]
   public void ClearsEventHandlers() {
     using var subject = new AutoProp<int>(1);
 
@@ -85,7 +82,7 @@ public class NotifierTest : TestClass {
     errorCalled.ShouldBe(0);
   }
 
-  [Test]
+  [Fact]
   public void CompletesAndBlocksOtherActions() {
     using var subject = new AutoProp<int>(1);
 
@@ -111,7 +108,7 @@ public class NotifierTest : TestClass {
     errorCalled.ShouldBe(0);
   }
 
-  [Test]
+  [Fact]
   public void CallsErrorHandler() {
     using var subject = new AutoProp<int>(1);
 
@@ -133,7 +130,7 @@ public class NotifierTest : TestClass {
     errorCalled.ShouldBe(1);
   }
 
-  [Test]
+  [Fact]
   public void DisposesCorrectly() {
     var subject = new AutoProp<int>(1);
 
@@ -160,7 +157,7 @@ public class NotifierTest : TestClass {
     errorCalled.ShouldBe(0);
   }
 
-  [Test]
+  [Fact]
   public void Finalizes() {
     // Weak reference has to be created and cleared from a static function
     // or else the GC won't ever collect it :P
@@ -168,7 +165,7 @@ public class NotifierTest : TestClass {
     Utils.ClearWeakReference(subject);
   }
 
-  [Test]
+  [Fact]
   public void DoesNotCallHandlersIfValueHasNotChanged() {
     var subject = new AutoProp<int>(1);
 
@@ -185,7 +182,7 @@ public class NotifierTest : TestClass {
     syncCalled.ShouldBe(2);
   }
 
-  [Test]
+  [Fact]
   public void DoesNotCallHandlerWhileInsideHandler() {
     var subject = new AutoProp<int>(1);
 
@@ -196,11 +193,11 @@ public class NotifierTest : TestClass {
       changes.Add(value);
       subject.OnNext(3);
     };
-    subject.Sync += (value) => syncs.Add(value);
+    subject.Sync += syncs.Add;
 
     subject.OnNext(2);
 
-    changes.ShouldBe(new[] { 2, 3 });
-    syncs.ShouldBe(new[] { 1, 2, 3 });
+    changes.ShouldBe([2, 3]);
+    syncs.ShouldBe([1, 2, 3]);
   }
 }

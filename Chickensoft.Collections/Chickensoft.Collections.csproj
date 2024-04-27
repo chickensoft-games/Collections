@@ -1,26 +1,26 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>netstandard2.1</TargetFramework>
     <EnableDynamicLoading>true</EnableDynamicLoading>
     <LangVersion>preview</LangVersion>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <Nullable>enable</Nullable>
     <CopyAllFiles>true</CopyAllFiles>
-    <RootNamespace>Chickensoft.GoDotCollections</RootNamespace>
+    <RootNamespace>Chickensoft.Collections</RootNamespace>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
     <OutputPath>./nupkg</OutputPath>
     <DebugType>portable</DebugType>
 
-    <Title>Chickensoft.GoDotCollections</Title>
+    <Title>Chickensoft.Collections</Title>
     <Version>0.0.0-devbuild</Version>
-    <Description>Chickensoft's collections collection.</Description>
-    <Copyright>© 2023 Chickensoft</Copyright>
+    <Description>Lightweight collections, utilities, and general interface types to help make maintainable code.</Description>
+    <Copyright>© 2024 Chickensoft</Copyright>
     <Authors>Chickensoft</Authors>
     <Company>Chickensoft</Company>
 
-    <PackageId>Chickensoft.GoDotCollections</PackageId>
-    <PackageReleaseNotes>Chickensoft.GoDotCollections release.</PackageReleaseNotes>
+    <PackageId>Chickensoft.Collections</PackageId>
+    <PackageReleaseNotes>Chickensoft.Collections release.</PackageReleaseNotes>
     <PackageIcon>icon.png</PackageIcon>
     <PackageTags />
     <PackageReadmeFile>README.md</PackageReadmeFile>

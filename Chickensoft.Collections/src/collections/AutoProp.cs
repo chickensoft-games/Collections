@@ -1,4 +1,4 @@
-namespace Chickensoft.GoDotCollections;
+namespace Chickensoft.Collections;
 
 using System;
 using System.Collections.Generic;

@@ -1,9 +1,7 @@
-Chickensoft.GoDotCollections/nupkg/
+Chickensoft.Collections/nupkg/
 
-Chickensoft.GoDotCollections.Tests/coverage/*
-!Chickensoft.GoDotCollections.Tests/coverage/.gdignore
+Chickensoft.Collections.Tests/coverage/*
 
-.godot/
 bin/
 obj/
 .generated/

@@ -1,33 +1,46 @@
-# GoDotCollections
+# Chickensoft Collections
 
 [![Chickensoft Badge][chickensoft-badge]][chickensoft-website] [![Discord][discord-badge]][discord] [![Read the docs][read-the-docs-badge]][docs] ![line coverage][line-coverage] ![branch coverage][branch-coverage]
 
-Chickensoft's collections collection.
+Lightweight collections, utilities, and general interface types to help make maintainable code.
 
 ---
 
 <p align="center">
-<img alt="Cardboard Box with Chickensoft Logo" src="Chickensoft.GoDotCollections/icon.png" width="200">
+<img alt="Cardboard Box with Chickensoft Logo" src="Chickensoft.Collections/icon.png" width="200">
 </p>
-
-Sometimes you need a collection abstraction that just isn't present in dotnet. Well, here you are.
 
 ## Install
 
-Currently, there are no Godot-specific dependencies. This is just a netstandard2.0 package — use with any Godot version!
+```sh
+dotnet add package Chickensoft.Collections
+```
 
 ## Map
 
-A typed facade over `OrderedDictionary`. Provides a basic mechanism to store strongly typed keys and values (preserving key insertion order).
+A typed facade over `OrderedDictionary`. Provides a basic mechanism to store strongly typed keys and values while preserving key insertion order.
+
+```csharp
+  var map = new Map<string, int>() {
+    ["b"] = 2,
+    ["a"] = 1,
+  };
+
+  map.Keys.ShouldBe(["b", "a"]);
+```
+
+## Set and IReadOnlySet
+
+For whatever reason, netstandard does not include `IReadOnlySet`. To workaround this, we've provided our own version of `IReadOnlySet` and a `Set` implementation that simply extends `HashSet` and adds the interface to it.
 
 ## AutoProp
 
-GoDotCollections includes a small reactive helper object that allows you to make observable properties in the style of `IObservable`, but is implemented over plain C# events and modifies the API to be more ergonomic *a la Chickensoft*.
+AutoProp allows you to make observable properties in the style of `IObservable`, but is implemented over plain C# events and modifies the API to be more ergonomic, *a la Chickensoft style*.
 
-AutoProps are basically a simplified version of a `BehaviorSubject` that only updates when the new value is not equal to the previous value, as determined by the equality comparer (or the default one if you don't provide one).
+AutoProps are basically a simplified version of a `BehaviorSubject` that only updates when the new value is not equal to the previous value, as determined by the equality comparer (or the default one if you don't provide one). They operate synchronously and make guarantees about the order of changes in a very simple, easy to reason about manner.
 
 ```csharp
-using Chickensoft.GoDotCollections;
+using Chickensoft.Collections;
 
 public class MyObject : IDisposable {
   // Read-only version exposed as interface.
@@ -105,9 +118,17 @@ public class MyObject : IDisposable {
 
 - ✅ Doesn't update if the value hasn't changed.
 
+## Blackboard
+
+A blackboard datatype is provided that allows reference values to be stored by type. It implements two interfaces, `IBlackboard` and `IReadOnlyBlackboard`.
+
+```csharp
+
+```
+
 ---
 
-🐣 Package generated from a 🐤 Chickensoft Template — <https://chickensoft.games>
+🐣 Created with love by Chickensoft 🐤 — <https://chickensoft.games>
 
 [chickensoft-badge]: https://raw.githubusercontent.com/chickensoft-games/chickensoft_site/main/static/img/badges/chickensoft_badge.svg
 [chickensoft-website]: https://chickensoft.games
@@ -115,5 +136,5 @@ public class MyObject : IDisposable {
 [discord]: https://discord.gg/gSjaPgMmYW
 [read-the-docs-badge]: https://raw.githubusercontent.com/chickensoft-games/chickensoft_site/main/static/img/badges/read_the_docs_badge.svg
 [docs]: https://chickensoft.games/docsickensoft%20Discord-%237289DA.svg?style=flat&logo=discord&logoColor=white
-[line-coverage]: Chickensoft.GoDotCollections.Tests/badges/line_coverage.svg
-[branch-coverage]: Chickensoft.GoDotCollections.Tests/badges/branch_coverage.svg
+[line-coverage]: Chickensoft.Collections.Tests/badges/line_coverage.svg
+[branch-coverage]: Chickensoft.Collections.Tests/badges/branch_coverage.svg

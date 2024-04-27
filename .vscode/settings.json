@@ -132,14 +132,13 @@
     // Allow html in markdown.
     "MD033": false,
     // Allow non-unique heading names so we don't break the changelog.
-    "MD024": false
+    "MD024": false,
   },
-  "markdownlint.ignore": [
-    "**/LICENSE"
+  "markdownlint.lintWorkspaceGlobs": [
+    "!**/LICENSE"
   ],
   "omnisharp.enableEditorConfigSupport": true,
   "omnisharp.enableMsBuildLoadProjectsOnDemand": false,
-  "omnisharp.enableRoslynAnalyzers": true,
   "omnisharp.maxFindSymbolsItems": 3000,
   "omnisharp.organizeImportsOnFormat": true,
   "omnisharp.useModernNet": true,

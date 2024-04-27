@@ -5,9 +5,8 @@
   "ignorePaths": [
     "**/*.tscn",
     "**/*.import",
-    "Chickensoft.GoDotCollections.Tests/badges/**/*.*",
-    "Chickensoft.GoDotCollections.Tests/coverage/**/*.*",
-    "Chickensoft.GoDotCollections.Tests/.godot/**/*.*"
+    "Chickensoft.Collections.Tests/badges/**/*.*",
+    "Chickensoft.Collections.Tests/coverage/**/*.*"
   ],
   "words": [
     "assemblyfilters",
@@ -26,8 +25,6 @@
     "Finalizer",
     "Finalizers",
     "globaltool",
-    "godotengine",
-    "godotpackage",
     "issuecomment",
     "justalemon",
     "lcov",

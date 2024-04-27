@@ -31,23 +31,8 @@ jobs:
       - name: 📦 Restore Dependencies
         run: dotnet restore
 
-      - name: 🤖 Setup Godot
-        uses: chickensoft-games/setup-godot@v2
-        with:
-          version: global.json
-
-      - name: 🔬 Verify Setup
-        run: |
-          dotnet --version
-          godot --version
-
-      - name: 🧑‍🔬 Generate .NET Bindings
-        working-directory: Chickensoft.GoDotCollections.Tests
-        run: godot --headless --build-solutions --quit || exit 0
-
       - name: 🦺 Build Projects
         run: dotnet build # --configuration Release
 
       - name: 🧪 Run Tests
-        working-directory: Chickensoft.GoDotCollections.Tests
-        run: godot --headless --run-tests --quit-on-finish
+        run: dotnet test
