@@ -123,7 +123,15 @@ public class MyObject : IDisposable {
 A blackboard datatype is provided that allows reference values to be stored by type. It implements two interfaces, `IBlackboard` and `IReadOnlyBlackboard`.
 
 ```csharp
+var blackboard = new Blackboard();
 
+blackboard.Set("string value");
+var stringValue = blackboard.Get<String>();
+
+blackboard.Set(new MyObject());
+var myObj = blackboard.Get<MyObject>();
+
+// ...and various other convenience methods.
 ```
 
 ---
