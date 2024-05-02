@@ -5,8 +5,8 @@ using System.Collections.Generic;
 using System.Data;
 using System.Runtime.CompilerServices;
 
-/// <summary><inheritdoc cref="IReadOnlyBlackboard" /></summary>
-public class Blackboard : IReadOnlyBlackboard {
+/// <summary><inheritdoc cref="IBlackboard" /></summary>
+public class Blackboard : IBlackboard {
   /// <summary>Blackboard data storage.</summary>
   protected readonly Dictionary<Type, object> _blackboard = [];
 
