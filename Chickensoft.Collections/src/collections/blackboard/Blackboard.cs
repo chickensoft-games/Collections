@@ -9,6 +9,8 @@ using System.Runtime.CompilerServices;
 public class Blackboard : IBlackboard {
   /// <summary>Blackboard data storage.</summary>
   protected readonly Dictionary<Type, object> _blackboard = [];
+  /// <summary>Type of objects present in the blackboard.</summary>
+  protected readonly Set<Type> _types = [];
 
   /// <summary>
   /// Creates a new blackboard. <inheritdoc cref="Blackboard" />
@@ -38,28 +40,36 @@ public class Blackboard : IBlackboard {
 
   /// <inheritdoc />
   #region Blackboard
-  public IEnumerable<Type> Types => _blackboard.Keys;
+  public IReadOnlySet<Type> Types => _types;
 
   /// <inheritdoc />
   [MethodImpl(MethodImplOptions.AggressiveInlining)]
   public void Set<TData>(TData data) where TData : class {
     var type = typeof(TData);
+    _types.Add(type);
     SetBlackboardData(type, data);
   }
 
   /// <inheritdoc />
   [MethodImpl(MethodImplOptions.AggressiveInlining)]
-  public void SetObject(Type type, object data) =>
+  public void SetObject(Type type, object data) {
+    _types.Add(type);
     SetBlackboardData(type, data);
+  }
 
   /// <inheritdoc />
-  public void Overwrite<TData>(TData data) where TData : class =>
-    OverwriteBlackboardData(typeof(TData), data);
+  public void Overwrite<TData>(TData data) where TData : class {
+    var type = typeof(TData);
+    _types.Add(type);
+    OverwriteBlackboardData(type, data);
+  }
 
   /// <inheritdoc />
   [MethodImpl(MethodImplOptions.AggressiveInlining)]
-  public void OverwriteObject(Type type, object data) =>
+  public void OverwriteObject(Type type, object data) {
+    _types.Add(type);
     OverwriteBlackboardData(type, data);
+  }
   #endregion Blackboard
 
   /// <summary>

@@ -10,7 +10,7 @@ using System.Collections.Generic;
 public interface IReadOnlyBlackboard {
   /// <summary>All types present in the blackboard.</summary>
   /// <returns>Enumerable types present in the blackboard.</returns>
-  IEnumerable<Type> Types { get; }
+  IReadOnlySet<Type> Types { get; }
 
   /// <summary>
   /// Gets data from the blackboard by its compile-time type.
