@@ -1,6 +1,5 @@
 namespace Chickensoft.Collections;
 
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
@@ -13,13 +12,14 @@ using System.Linq;
 /// </summary>
 /// <typeparam name="TKey">Key type.</typeparam>
 /// <typeparam name="TValue">Value type.</typeparam>
-public class Map<TKey, TValue> : IEnumerable where TKey : notnull {
+public class Map<TKey, TValue> : IEnumerable,
+IDictionary<TKey, TValue> where TKey : notnull {
   private readonly OrderedDictionary _collection = [];
 
   /// <summary>Retrieve a map value by key.</summary>
   /// <param name="key">Map key.</param>
-  public TValue? this[TKey key] {
-    get => (TValue?)_collection[key];
+  public TValue this[TKey key] {
+    get => (TValue)_collection[key];
     set => _collection[key] = value;
   }
 
@@ -30,17 +30,19 @@ public class Map<TKey, TValue> : IEnumerable where TKey : notnull {
     set => _collection[index] = value;
   }
 
-  /// <summary>Map keys.</summary>
-  public IEnumerable<TKey> Keys => _collection.Keys.Cast<TKey>();
-
-  /// <summary>Map values.</summary>
-  public IEnumerable<TValue> Values => _collection.Values.Cast<TValue>();
-
-  /// <summary>Whether or not the map is read-only.</summary>
+  /// <inheritdoc />
   public bool IsReadOnly => _collection.IsReadOnly;
 
-  /// <summary>Number of key/value pairs in the map.</summary>
+  /// <inheritdoc />
   public int Count => _collection.Count;
+
+  /// <inheritdoc />
+  public ICollection<TKey> Keys =>
+    _collection.Keys.Cast<TKey>().ToArray();
+
+  /// <inheritdoc />
+  public ICollection<TValue> Values =>
+    _collection.Values.Cast<TValue>().ToArray();
 
   /// <summary>Map enumerator.</summary>
   public IDictionaryEnumerator GetEnumerator() => _collection.GetEnumerator();
@@ -56,29 +58,84 @@ public class Map<TKey, TValue> : IEnumerable where TKey : notnull {
   /// <param name="index">Index to remove from.</param>
   public void RemoveAt(int index) => _collection.RemoveAt(index);
 
-  /// <summary>True if the given key is in the map.</summary>
-  /// <param name="key">Key.</param>
-  public bool Contains(TKey key) => _collection.Contains(key);
-
-  /// <summary>Adds or updates a key/value pair to the map.</summary>
-  /// <param name="key">Key.</param>
-  /// <param name="value">Value.</param>
+  /// <inheritdoc />
   public void Add(TKey key, TValue value) => _collection.Add(key, value);
 
-  /// <summary>Removes all entries from the map.</summary>
+  /// <inheritdoc />
   public void Clear() => _collection.Clear();
 
-  /// <summary>Remove a key/value pair from the map.</summary>
-  /// <param name="key">Key.</param>
-  public void Remove(TKey key) => _collection.Remove(key);
-
-  /// <summary>
-  /// Copy the map to an array, beginning at the given index.
-  /// </summary>
-  /// <param name="array">Destination array.</param>
-  /// <param name="index">Start index.</param>
-  public void CopyTo(Array array, int index)
-    => _collection.CopyTo(array, index);
-
   IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+
+  /// <inheritdoc />
+  public bool ContainsKey(TKey key) => _collection.Contains(key);
+
+  /// <inheritdoc />
+  public bool Remove(TKey key) {
+    lock (_collection) {
+      if (_collection.Contains(key)) {
+        _collection.Remove(key);
+        return true;
+      }
+    }
+    return false;
+  }
+
+  /// <inheritdoc />
+  public bool TryGetValue(TKey key, out TValue value) {
+    lock (_collection) {
+      if (_collection.Contains(key)) {
+        value = (TValue)_collection[key];
+        return true;
+      }
+    }
+    value = default!;
+    return false;
+  }
+
+  /// <inheritdoc />
+  public void Add(KeyValuePair<TKey, TValue> item) =>
+    _collection.Add(item.Key, item.Value);
+
+  /// <inheritdoc />
+  public bool Contains(KeyValuePair<TKey, TValue> item) {
+    lock (_collection) {
+      return _collection.Contains(item.Key) &&
+      EqualityComparer<object?>.Default.Equals(
+        _collection[item.Key], item.Value
+      );
+    }
+  }
+
+  /// <inheritdoc />
+  public void CopyTo(KeyValuePair<TKey, TValue>[] array, int arrayIndex) {
+    lock (_collection) {
+      foreach (DictionaryEntry entry in _collection) {
+        array[arrayIndex++] = new KeyValuePair<TKey, TValue>(
+          (TKey)entry.Key, (TValue)entry.Value
+        );
+      }
+    }
+  }
+
+  /// <inheritdoc />
+  public bool Remove(KeyValuePair<TKey, TValue> item) {
+    lock (_collection) {
+      if (Contains(item)) {
+        _collection.Remove(item.Key);
+        return true;
+      }
+    }
+    return false;
+  }
+
+  /// <inheritdoc />
+  IEnumerator<
+    KeyValuePair<TKey, TValue>> IEnumerable<KeyValuePair<TKey, TValue>
+  >.GetEnumerator() {
+    foreach (DictionaryEntry entry in _collection) {
+      yield return new KeyValuePair<TKey, TValue>(
+        (TKey)entry.Key, (TValue)entry.Value
+      );
+    }
+  }
 }
