@@ -134,6 +134,35 @@ var myObj = blackboard.Get<MyObject>();
 // ...and various other convenience methods.
 ```
 
+## EntityTable
+
+The `EntityTable<TId>` is a simple wrapper over a `ConcurrentDictionary` that is provided to help you conveniently associate any type of value with an identifier. Table entries are requested by their identifier *and* type. If the value exists and matches the requested type, it is returned. Otherwise, `null` is returned.
+
+```csharp
+var table = new EntityTable<int>();
+
+table.Set(42, "dolphins");
+
+// Use pattern matching for an optimal experience.
+if (table.Get<string>(42) is { } value) {
+  Console.WriteLine("Dolphins are present.");
+}
+
+table.Remove(42);
+```
+
+A default implementation that uses `string` is also provided:
+
+```csharp
+var table = new EntityTable();
+
+table.Set("identifier", new object())
+
+if (table.Get<object>("identifier") is { } value) {
+  Console.WriteLine("Object is present.");
+}
+```
+
 ---
 
 🐣 Created with love by Chickensoft 🐤 — <https://chickensoft.games>
