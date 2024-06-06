@@ -163,6 +163,39 @@ if (table.Get<object>("identifier") is { } value) {
 }
 ```
 
+## Boxless Queue
+
+The boxless queue allows you to queue struct values on the heap without boxing them, and dequeue them without needing to unbox them.
+
+To do so, you must make an object which implements the `IBoxlessValueHandler` interface. The `HandleValue` method will be invoked whenever the boxless queue dequeues a value.
+
+```csharp
+public class MyValueHandler : IBoxlessValueHandler {
+  public void HandleValue<TValue>(in TValue value) where TValue : struct {
+    Console.WriteLine($"Received value {value}");
+  }
+}
+```
+
+Once you have implemented the `IBoxlessValueHandler`, you can create a boxless queue.
+
+```csharp
+    var handler = new MyValueHandler();
+    
+    var queue = new BoxlessQueue(handler);
+
+    // Add something to the queue.
+    queue.Enqueue(valueA);
+    
+    // See if anything is in the queue.
+    if (queue.HasValues) {
+      Console.WriteLine("Something in the queue.");
+    }
+
+    // Take something out of the queue. Calls our value handler.
+    queue.Dequeue();
+```
+
 ---
 
 🐣 Created with love by Chickensoft 🐤 — <https://chickensoft.games>
