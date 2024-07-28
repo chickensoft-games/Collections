@@ -196,6 +196,43 @@ Once you have implemented the `IBoxlessValueHandler`, you can create a boxless q
     queue.Dequeue();
 ```
 
+## Pool
+
+A simple object pool implementation is provided that allows you to pre-allocate objects when memory churn is a concern. Internally, the pool is just a simple wrapper around a .NET concurrent dictionary that maps types to concurrent queues of objects. By leveraging .NET concurrent collections, we can create a type-safe and thread-safe object pool that's easy to use.
+
+Any object you wish to store in a pool must conform to `IPooled` and implement the required `Reset` method. The reset method is called when the object is returned to the pool, allowing you to reset the object's state.
+
+```csharp
+  public abstract class Shape : IPooled {
+    public void Reset() { }
+  }
+
+  public class Cube : Entity { }
+  public class Sphere : Entity { }
+```
+
+A pool can be easily created. Each derived type that you wish to pool can be "registered" with the pool. The pool will create instances of each type registered with it according to the provided capacity.
+
+```csharp
+  var pool = new Pool();
+
+  pool.Register<Cube>(10); // Preallocate 10 cubes.
+  pool.Register<Sphere>(5); // Preallocate 5 spheres.
+
+  // Borrow a cube and a sphere, removing them from the pool:
+  var cube = pool.Get<Cube>();
+
+  // You can also get the an object without a generic type:
+  var cube2 = pool.Get(typeof(Cube));
+  var cube3 = pool.Get(cube.GetType());
+  
+  var sphere = pool.Get<Sphere>();
+
+  // Return them to the pool (their Reset() methods will be called):
+  pool.Return(cube);
+  pool.Return(sphere);
+```
+
 ---
 
 🐣 Created with love by Chickensoft 🐤 — <https://chickensoft.games>
