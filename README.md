@@ -214,7 +214,7 @@ Any object you wish to store in a pool must conform to `IPooled` and implement t
 A pool can be easily created. Each derived type that you wish to pool can be "registered" with the pool. The pool will create instances of each type registered with it according to the provided capacity.
 
 ```csharp
-  var pool = new Pool();
+  var pool = new Pool<Shape>();
 
   pool.Register<Cube>(10); // Preallocate 10 cubes.
   pool.Register<Sphere>(5); // Preallocate 5 spheres.
