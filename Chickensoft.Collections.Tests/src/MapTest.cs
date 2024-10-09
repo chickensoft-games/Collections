@@ -228,5 +228,51 @@ public class MapTest {
     map.Contains(new KeyValuePair<string, int>("b", 2)).ShouldBeFalse();
   }
 
+  [Fact]
+  public void CollectionSyntaxPreservesOrder() {
+    var kvpList = new List<KeyValuePair<string, int>> {
+      new("c", 3),
+      new("b", 2),
+      new("a", 1),
+    };
 
+    Map<string, int> map = [.. kvpList];
+
+    map.Keys.ShouldBe(["c", "b", "a"]);
+
+    kvpList.Reverse();
+
+    map = [.. kvpList];
+
+    map.Keys.ShouldBe(["a", "b", "c"]);
+  }
+
+  [Fact]
+  public void TypeSafeEnumerator() {
+    var map = new Map<string, int>() {
+      ["a"] = 1,
+      ["b"] = 2,
+      ["c"] = 3
+    };
+
+    var kvpList = new List<KeyValuePair<string, int>>();
+
+    foreach (var kvp in map) {
+      kvpList.Add(kvp);
+    }
+  }
+
+  [Fact]
+  public void KvpConstructor() {
+    var kvpList = new List<KeyValuePair<string, int>> {
+      new("c", 3),
+      new("b", 2),
+      new("a", 1),
+    };
+
+    var map = new Map<string, int>(kvpList);
+
+    map.Keys.ShouldBe(["c", "b", "a"]);
+    map.Values.ShouldBe([3, 2, 1]);
+  }
 }

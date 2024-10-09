@@ -6,14 +6,14 @@ using System.Collections.Specialized;
 using System.Linq;
 
 /// <summary>
-/// An <see cref="OrderedDictionary" /> wrapper that preserves key insertion
-/// order.
-/// Credit: https://stackoverflow.com/a/1396743
+/// A map is an <see cref="OrderedDictionary" /> wrapper that preserves key
+/// insertion order. Based on <a href="https://stackoverflow.com/a/1396743" />
 /// </summary>
 /// <typeparam name="TKey">Key type.</typeparam>
 /// <typeparam name="TValue">Value type.</typeparam>
-public class Map<TKey, TValue> : IEnumerable,
-IDictionary<TKey, TValue> where TKey : notnull {
+public class Map<TKey, TValue> :
+  IDictionary<TKey, TValue> where TKey : notnull {
+
   private readonly OrderedDictionary _collection = [];
 
   /// <summary>Retrieve a map value by key.</summary>
@@ -30,6 +30,33 @@ IDictionary<TKey, TValue> where TKey : notnull {
     set => _collection[index] = value;
   }
 
+  /// <summary>
+  /// <para>
+  /// Creates a new map.
+  /// </para>
+  /// <para>
+  /// <inheritdoc cref="Map{TKey, TValue}" path="/summary" />
+  /// </para>
+  /// </summary>
+  public Map() { }
+
+  /// <summary>
+  /// <para>
+  /// Creates a new map.
+  /// </para>
+  /// <para>
+  /// <inheritdoc cref="Map{TKey, TValue}" path="/summary" />
+  /// </para>
+  /// </summary>
+  /// <param name="collection">An enumerable of key-value-pairs which should
+  /// be added to the map initially.
+  /// </param>
+  public Map(IEnumerable<KeyValuePair<TKey, TValue>> collection) {
+    foreach (var item in collection) {
+      _collection.Add(item.Key, item.Value);
+    }
+  }
+
   /// <inheritdoc />
   public bool IsReadOnly => _collection.IsReadOnly;
 
@@ -43,9 +70,6 @@ IDictionary<TKey, TValue> where TKey : notnull {
   /// <inheritdoc />
   public ICollection<TValue> Values =>
     _collection.Values.Cast<TValue>().ToArray();
-
-  /// <summary>Map enumerator.</summary>
-  public IDictionaryEnumerator GetEnumerator() => _collection.GetEnumerator();
 
   /// <summary>Insert a key and value at the specified index.</summary>
   /// <param name="index">Index to insert to.</param>
@@ -64,7 +88,7 @@ IDictionary<TKey, TValue> where TKey : notnull {
   /// <inheritdoc />
   public void Clear() => _collection.Clear();
 
-  IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+  // IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
   /// <inheritdoc />
   public bool ContainsKey(TKey key) => _collection.Contains(key);
@@ -129,9 +153,10 @@ IDictionary<TKey, TValue> where TKey : notnull {
   }
 
   /// <inheritdoc />
-  IEnumerator<
-    KeyValuePair<TKey, TValue>> IEnumerable<KeyValuePair<TKey, TValue>
-  >.GetEnumerator() {
+  IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+
+  /// <inheritdoc />
+  public IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator() {
     foreach (DictionaryEntry entry in _collection) {
       yield return new KeyValuePair<TKey, TValue>(
         (TKey)entry.Key, (TValue)entry.Value
