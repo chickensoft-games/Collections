@@ -12,7 +12,9 @@ using System.Linq;
 /// <typeparam name="TKey">Key type.</typeparam>
 /// <typeparam name="TValue">Value type.</typeparam>
 public class Map<TKey, TValue> :
-  IDictionary<TKey, TValue> where TKey : notnull {
+  IDictionary<TKey, TValue>,
+  IReadOnlyDictionary<TKey, TValue>
+  where TKey : notnull {
 
   private readonly OrderedDictionary _collection = [];
 
@@ -70,6 +72,14 @@ public class Map<TKey, TValue> :
   /// <inheritdoc />
   public ICollection<TValue> Values =>
     _collection.Values.Cast<TValue>().ToArray();
+
+  #region IReadOnlyDictionary<TKey, TValue>
+  IEnumerable<TKey> IReadOnlyDictionary<TKey, TValue>.Keys =>
+    _collection.Keys.Cast<TKey>();
+
+  IEnumerable<TValue> IReadOnlyDictionary<TKey, TValue>.Values =>
+    _collection.Values.Cast<TValue>();
+  #endregion IReadOnlyDictionary<TKey, TValue>
 
   /// <summary>Insert a key and value at the specified index.</summary>
   /// <param name="index">Index to insert to.</param>

@@ -145,9 +145,12 @@ public class MapTest {
       ["a"] = 1,
     };
 
+    var readonlyMap = map as IReadOnlyDictionary<string, int>;
+
     map["b"] = 3;
 
     map.Keys.ShouldBe(["b", "a"]);
+    readonlyMap.Keys.ShouldBe(["b", "a"]);
   }
 
   [Fact]
@@ -170,7 +173,18 @@ public class MapTest {
       ["a"] = 1,
       ["b"] = 2
     };
+
+    var readonlyMap = map as IReadOnlyDictionary<string, int>;
+
     var values = map.Values.ToList();
+
+    values.ShouldBeAssignableTo<ICollection<int>>();
+
+    values[0].ShouldBe(1);
+    values[1].ShouldBe(2);
+
+
+    values = readonlyMap.Values.ToList();
 
     values.ShouldBeAssignableTo<ICollection<int>>();
 
