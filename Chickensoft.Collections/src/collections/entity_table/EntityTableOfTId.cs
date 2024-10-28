@@ -29,6 +29,11 @@ public class EntityTable<TId> where TId : notnull {
   }
 
   /// <summary>
+  /// Clears (but does not dispose) all entities from the table.
+  /// </summary>
+  public void Clear() => _entities.Clear();
+
+  /// <summary>
   /// Retrieve an entity from the table.
   /// </summary>
   /// <typeparam name="TUsage">Type to use the entity as — entity must be

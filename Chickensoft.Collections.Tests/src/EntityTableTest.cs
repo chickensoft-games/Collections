@@ -26,4 +26,20 @@ public class EntityTableTest {
     table.Get<string>("a").ShouldBeNull();
     table.Get<object>("b").ShouldNotBeNull();
   }
+
+  [Fact]
+  public void Clears() {
+    var table = new EntityTable();
+
+    table.Set("a", "one");
+    table.Set("b", new object());
+
+    table.Get<string>("a").ShouldBe("one");
+    table.Get<object>("b").ShouldNotBeNull();
+
+    table.Clear();
+
+    table.Get<string>("a").ShouldBeNull();
+    table.Get<object>("b").ShouldBeNull();
+  }
 }
