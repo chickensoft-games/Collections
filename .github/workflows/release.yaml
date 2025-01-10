@@ -1,4 +1,4 @@
-name: '📦 Release'
+name: "📦 Release"
 on:
   # Make a release whenever the developer wants.
   workflow_dispatch:
@@ -26,7 +26,7 @@ on:
         default: "patch"
 jobs:
   release:
-    name: '📦 Release'
+    name: "📦 Release"
     runs-on: ubuntu-latest
     steps:
       - name: 🧾 Checkout
@@ -34,14 +34,13 @@ jobs:
         with:
           token: ${{ secrets.GH_BASIC }}
           lfs: true
-          submodules: 'recursive'
+          submodules: "recursive"
           fetch-depth: 0 # So we can get all tags.
 
       - name: 🔎 Read Current Project Version
         id: current-version
-        uses: WyriHaximus/github-action-get-previous-tag@v1
-        with:
-          fallback: "0.0.0-devbuild"
+        run: |
+          echo "tag=$(git tag --sort=v:refname | grep -E '^[^v]' | tail -1)" >> "$GITHUB_OUTPUT"
 
       - name: 🖨 Print Current Version
         run: |
