@@ -11,7 +11,7 @@ public class EntityTableTest {
   }
 
   [Fact]
-  public void StoresValues() {
+  public void SetStoresValuesAndOverwritesExistingValues() {
     var table = new EntityTable();
 
     table.Set("a", "one");
@@ -20,11 +20,23 @@ public class EntityTableTest {
     table.Get<string>("a").ShouldBe("one");
     table.Get<object>("b").ShouldNotBeNull();
 
+    table.Set("a", "two");
+    table.Get<string>("a").ShouldBe("two");
+
     table.Remove("a");
     table.Remove(null);
 
     table.Get<string>("a").ShouldBeNull();
     table.Get<object>("b").ShouldNotBeNull();
+  }
+
+  [Fact]
+  public void TryAddOnlyStoresValuesForNewKeys() {
+    var table = new EntityTable();
+
+    table.TryAdd("a", "one").ShouldBeTrue();
+    table.TryAdd("a", "two").ShouldBeFalse();
+    table.Get<string>("a").ShouldBe("one");
   }
 
   [Fact]

@@ -16,7 +16,15 @@ public class EntityTable<TId> where TId : notnull {
   /// </summary>
   /// <param name="id">Entity id.</param>
   /// <param name="entity">Entity object.</param>
-  public void Set(TId id, object entity) => _entities.TryAdd(id, entity);
+  public void Set(TId id, object entity) => _entities[id] = entity;
+
+  /// <summary>
+  /// Attempts to add an entity to the table returning true if successful.
+  /// </summary>
+  /// <param name="id">Entity id.</param>
+  /// <param name="entity">Entity object.</param>
+  /// <returns>`true` if the entity was added, `false` otherwise.</returns>
+  public bool TryAdd(TId id, object entity) => _entities.TryAdd(id, entity);
 
   /// <summary>
   /// Remove an entity from the table.
