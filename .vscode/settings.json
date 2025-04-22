@@ -140,7 +140,6 @@
   "omnisharp.enableEditorConfigSupport": true,
   "omnisharp.enableMsBuildLoadProjectsOnDemand": false,
   "omnisharp.maxFindSymbolsItems": 3000,
-  "omnisharp.organizeImportsOnFormat": true,
   "omnisharp.useModernNet": true,
   // Remove these if you're happy with your terminal profiles.
   "terminal.integrated.defaultProfile.windows": "Git Bash",
@@ -161,5 +160,6 @@
       "source": "PowerShell"
     }
   },
-  "dotnet.completion.showCompletionItemsFromUnimportedNamespaces": true
+  "dotnet.completion.showCompletionItemsFromUnimportedNamespaces": true,
+  "dotnet.formatting.organizeImportsOnFormat": true
 }
