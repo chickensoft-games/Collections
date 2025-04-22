@@ -103,7 +103,7 @@ public class MyObject : IDisposable {
 ```
 
 - ✅ Uses plain C# events.
-  
+
   Observers are called one-at-a-time, in-order of subscription, on the invoking thread, and synchronously (and will always be that way unless Microsoft tampers with the underlying Multicast delegate implementation that powers C# events).
 
   Chickensoft prefers to keep everything synchronous and deterministic in game development, only adding parallelization or asynchronicity where it's absolutely necessary for performance. Otherwise, simpler is better.
@@ -181,12 +181,12 @@ Once you have implemented the `IBoxlessValueHandler`, you can create a boxless q
 
 ```csharp
     var handler = new MyValueHandler();
-    
+
     var queue = new BoxlessQueue(handler);
 
     // Add something to the queue.
     queue.Enqueue(valueA);
-    
+
     // See if anything is in the queue.
     if (queue.HasValues) {
       Console.WriteLine("Something in the queue.");
@@ -225,7 +225,7 @@ A pool can be easily created. Each derived type that you wish to pool can be "re
   // You can also get the an object without a generic type:
   var cube2 = pool.Get(typeof(Cube));
   var cube3 = pool.Get(cube.GetType());
-  
+
   var sphere = pool.Get<Sphere>();
 
   // Return them to the pool (their Reset() methods will be called):
@@ -237,11 +237,11 @@ A pool can be easily created. Each derived type that you wish to pool can be "re
 
 🐣 Created with love by Chickensoft 🐤 — <https://chickensoft.games>
 
-[chickensoft-badge]: https://raw.githubusercontent.com/chickensoft-games/chickensoft_site/main/static/img/badges/chickensoft_badge.svg
+[chickensoft-badge]: https://chickensoft.games/img/badges/chickensoft_badge.svg
 [chickensoft-website]: https://chickensoft.games
-[discord-badge]: https://raw.githubusercontent.com/chickensoft-games/chickensoft_site/main/static/img/badges/discord_badge.svg
+[discord-badge]: https://chickensoft.games/img/badges/discord_badge.svg
 [discord]: https://discord.gg/gSjaPgMmYW
-[read-the-docs-badge]: https://raw.githubusercontent.com/chickensoft-games/chickensoft_site/main/static/img/badges/read_the_docs_badge.svg
+[read-the-docs-badge]: https://chickensoft.games/img/badges/read_the_docs_badge.svg
 [docs]: https://chickensoft.games/docsickensoft%20Discord-%237289DA.svg?style=flat&logo=discord&logoColor=white
 [line-coverage]: Chickensoft.Collections.Tests/badges/line_coverage.svg
 [branch-coverage]: Chickensoft.Collections.Tests/badges/branch_coverage.svg
