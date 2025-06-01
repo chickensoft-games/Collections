@@ -67,11 +67,11 @@ public class Map<TKey, TValue> :
 
   /// <inheritdoc />
   public ICollection<TKey> Keys =>
-    _collection.Keys.Cast<TKey>().ToArray();
+    [.. _collection.Keys.Cast<TKey>()];
 
   /// <inheritdoc />
   public ICollection<TValue> Values =>
-    _collection.Values.Cast<TValue>().ToArray();
+    [.. _collection.Values.Cast<TValue>()];
 
   #region IReadOnlyDictionary<TKey, TValue>
   IEnumerable<TKey> IReadOnlyDictionary<TKey, TValue>.Keys =>
