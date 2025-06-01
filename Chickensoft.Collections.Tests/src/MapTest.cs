@@ -184,7 +184,7 @@ public class MapTest {
     values[1].ShouldBe(2);
 
 
-    values = readonlyMap.Values.ToList();
+    values = [.. readonlyMap.Values];
 
     values.ShouldBeAssignableTo<ICollection<int>>();
 
