@@ -1,4 +1,4 @@
-namespace Chickensoft.Collections.Tests;
+namespace Chickensoft.Collections;
 
 using System;
 using System.Collections.Concurrent;
