@@ -6,6 +6,8 @@ using System.Linq;
 using Shouldly;
 using Xunit;
 
+#pragma warning disable CS0618 // obsolete
+
 public class MapTest {
   [Fact]
   public void Initializes()
@@ -290,3 +292,5 @@ public class MapTest {
     map.Values.ShouldBe([3, 2, 1]);
   }
 }
+
+#pragma warning restore CS0618
