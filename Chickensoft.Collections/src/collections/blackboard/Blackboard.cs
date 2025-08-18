@@ -83,7 +83,7 @@ public class Blackboard : IBlackboard {
     _blackboard.TryGetValue(type, out var data)
       ? data
       : throw new KeyNotFoundException(
-        $"Data of type {type} not found in the blackboard."
+        $"Data of type {type} not found in the blackboard. (You may be missing the [Meta] attribute.)"
       );
 
   /// <summary>
