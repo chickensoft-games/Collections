@@ -1,5 +1,6 @@
 namespace Chickensoft.Collections;
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
@@ -11,6 +12,10 @@ using System.Linq;
 /// </summary>
 /// <typeparam name="TKey">Key type.</typeparam>
 /// <typeparam name="TValue">Value type.</typeparam>
+[Obsolete(
+  "Superseded by Chickensoft.Collections.LinkedHashMap which provides " +
+  "struct enumerators."
+)]
 public class Map<TKey, TValue> :
   IDictionary<TKey, TValue>,
   IReadOnlyDictionary<TKey, TValue>

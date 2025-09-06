@@ -8,6 +8,14 @@ using System.Collections.Generic;
 /// <typeparam name="T">The type of elements in the set.</typeparam>
 public interface IReadOnlySet<T> : IReadOnlyCollection<T> {
   /// <summary>
+  /// Determines whether the set contains the specified element.
+  /// </summary>
+  /// <param name="item">The element to locate in the set.</param>
+  /// <returns>True if the set contains the specified element; otherwise, false.
+  /// </returns>
+  bool Contains(T item);
+
+  /// <summary>
   /// Determines whether a set is a subset of a specified collection.
   /// </summary>
   /// <param name="other">The collection to compare to the current set.</param>
@@ -64,7 +72,9 @@ public interface IReadOnlySet<T> : IReadOnlyCollection<T> {
   /// If the current set is a proper subset of other, other must have at least
   /// one element that the current set does not have.
   /// <br />
-  /// An empty set is a proper subset of any other collection. Therefore, this method returns true if the current set is empty, unless the other parameter is also an empty set.
+  /// An empty set is a proper subset of any other collection. Therefore, this
+  /// method returns true if the current set is empty, unless the other
+  /// parameter is also an empty set.
   /// <br />
   /// This method always returns false if the current set has more or the same
   ///  number of elements than other.

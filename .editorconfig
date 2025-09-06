@@ -463,3 +463,7 @@ dotnet_diagnostic.IDE0010.severity = none
 dotnet_diagnostic.IDE0062.severity = warning
 # Don't make me use properties if I don't want to.
 dotnet_diagnostic.IDE0032.severity = none
+# Don't simplify new type names
+dotnet_diagnostic.IDE0090.severity = none
+# Erroneously simplifies lambdas with the "in" keyword which breaks at compile
+dotnet_diagnostic.IDE0350.severity = none

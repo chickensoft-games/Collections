@@ -72,4 +72,13 @@ public class PoolTest {
 
     cube.ShouldBeSameAs(cube2);
   }
+
+  [Fact]
+  public void AllowsNullReturns() {
+    var pool = new Pool<Shape>();
+
+    pool.Register<Cube>();
+
+    Should.NotThrow(() => pool.Return(null!));
+  }
 }

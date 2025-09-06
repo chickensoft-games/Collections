@@ -104,6 +104,10 @@ public interface IAutoProp<T> {
 /// the property. Errors can be pushed more than once and do not throw.
 /// </summary>
 /// <typeparam name="T">Type of the value to observe.</typeparam>
+[Obsolete(
+  "Superseded by AutoValue in Chickensoft's reactive coding library, " +
+  "Chickensoft.Sync."
+)]
 public sealed class AutoProp<T> : IDisposable, IAutoProp<T> {
   /// <inheritdoc />
   public event Action<T>? Changed;

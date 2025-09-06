@@ -10,31 +10,31 @@ using System.Collections.Generic;
 /// it is removed from the pool. When an object is returned, it is reset and
 /// placed back into the pool.
 /// </summary>
-public class Pool<TBaseType> where TBaseType : IPooled {
-  private readonly ConcurrentDictionary<Type, ConcurrentQueue<TBaseType>>
+public class Pool<T> {
+  private readonly ConcurrentDictionary<Type, ConcurrentQueue<T>>
     _pool = [];
-  private readonly Dictionary<Type, Func<TBaseType>> _factories = [];
+  private readonly Dictionary<Type, Func<T>> _factories = [];
 
   /// <summary>Registers a type with the pool.</summary>
   /// <param name="capacity">The number of items to instantiate for each type
   /// registered in the pool.</param>
-  /// <typeparam name="TDerivedType">The type to register.</typeparam>
-  public void Register<TDerivedType>(int capacity = 1)
-    where TDerivedType : TBaseType, new() => Register(() => new TDerivedType());
+  /// <typeparam name="TDerived">The type to register.</typeparam>
+  public void Register<TDerived>(int capacity = 1)
+    where TDerived : T, new() => Register(() => new TDerived());
 
   /// <summary>Registers a type with the pool.</summary>
   /// <param name="factory">A factory function that creates an instance of the
   /// type to register.</param>
   /// <param name="capacity">The number of items to instantiate for each type
   /// registered in the pool.</param>
-  /// <typeparam name="TDerivedType">The type to register.</typeparam>
+  /// <typeparam name="TDerived">The type to register.</typeparam>
   /// <exception cref="InvalidOperationException" />
-  public void Register<TDerivedType>(
-    Func<TDerivedType> factory, int capacity = 1
+  public void Register<TDerived>(
+    Func<TDerived> factory, int capacity = 1
   )
-  where TDerivedType : TBaseType {
-    var type = typeof(TDerivedType);
-    var queue = new ConcurrentQueue<TBaseType>();
+  where TDerived : T {
+    var type = typeof(TDerived);
+    var queue = new ConcurrentQueue<T>();
 
     for (var i = 0; i < capacity; i++) {
       var item = factory();
@@ -53,15 +53,15 @@ public class Pool<TBaseType> where TBaseType : IPooled {
   }
 
   /// <summary>Borrows an object from the pool.</summary>
-  /// <typeparam name="TDerivedType">The type of object to borrow.</typeparam>
+  /// <typeparam name="TDerived">The type of object to borrow.</typeparam>
   /// <returns>An object of the specified type.</returns>
-  public TDerivedType Get<TDerivedType>() where TDerivedType : TBaseType, new()
-    => (TDerivedType)Get(typeof(TDerivedType));
+  public TDerived Get<TDerived>() where TDerived : T, new()
+    => (TDerived)Get(typeof(TDerived))!;
 
   /// <summary>Borrows an object from the pool.</summary>
   /// <param name="type">The type of object to borrow.</param>
   /// <returns>An object of the specified type.</returns>
-  public TBaseType Get(Type type) {
+  public T Get(Type type) {
     if (!_pool.TryGetValue(type, out var queue)) {
       throw new InvalidOperationException($"Type `{type}` is not registered.");
     }
@@ -77,14 +77,18 @@ public class Pool<TBaseType> where TBaseType : IPooled {
   /// <summary>Returns an object to the pool.</summary>
   /// <param name="item">The object to return.</param>
   /// <exception cref="InvalidOperationException" />
-  public void Return(TBaseType item) {
+  public void Return(T item) {
+    if (item is null) { return; }
+
     var type = item.GetType();
 
     if (!_pool.TryGetValue(type, out var queue)) {
       throw new InvalidOperationException($"Type `{type}` is not registered.");
     }
 
-    item.Reset();
+    if (item is IPooled pooled) {
+      pooled.Reset();
+    }
 
     queue.Enqueue(item);
   }
