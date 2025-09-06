@@ -14,8 +14,7 @@ public class LinkedHashMapTest {
 
     map.ShouldBeOfType<LinkedHashMap<string, string>>();
 
-    map.KeyComparer.ShouldNotBeNull();
-    map.ValueComparer.ShouldNotBeNull();
+    map.Comparer.ShouldNotBeNull();
   }
 
   [Fact]
@@ -486,51 +485,25 @@ public class LinkedHashMapTest {
   }
 
   [Fact]
-  public void KeyComparerSetThrowsWhenCollectionIsNonEmpty() {
+  public void ComparerSetThrowsWhenCollectionIsNonEmpty() {
     var map = new LinkedHashMap<string, int> {
       ["a"] = 1
     };
 
     Should.Throw<InvalidOperationException>(() => {
-      map.KeyComparer = EqualityComparer<string>.Default;
+      map.Comparer = EqualityComparer<string>.Default;
     });
   }
 
   [Fact]
-  public void KeyComparerSetWorksWhenCollectionIsEmpty() {
+  public void ComparerSetWorksWhenCollectionIsEmpty() {
     var map = new LinkedHashMap<string, int>();
 
     map.Count.ShouldBe(0);
 
     var comparer = StringComparer.OrdinalIgnoreCase;
-    map.KeyComparer = comparer;
-    map.KeyComparer.ShouldBeSameAs(comparer);
-  }
-
-  [Fact]
-  public void ValueComparerSetThrowsWhenCollectionIsNonEmpty() {
-    var map = new LinkedHashMap<string, int> {
-      ["a"] = 1
-    };
-
-    Should.Throw<InvalidOperationException>(() => {
-      map.ValueComparer = EqualityComparer<int>.Default;
-    });
-  }
-
-  [Fact]
-  public void ValueComparerSetWorksWhenCollectionIsEmpty() {
-    var map = new LinkedHashMap<string, int>();
-
-    map.Count.ShouldBe(0);
-
-    var comparer = EqualityComparer<int>.Create(
-      (x, y) => throw new NotImplementedException(),
-      obj => throw new NotImplementedException()
-    );
-
-    map.ValueComparer = comparer;
-    map.ValueComparer.ShouldBeSameAs(comparer);
+    map.Comparer = comparer;
+    map.Comparer.ShouldBeSameAs(comparer);
   }
 
   [Fact]

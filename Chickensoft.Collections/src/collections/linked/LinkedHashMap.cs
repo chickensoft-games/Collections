@@ -22,13 +22,12 @@ public sealed class LinkedHashMap<TKey, TValue> :
   private readonly Dictionary<
     TKey, LinkedListNode<KeyValuePair<TKey, TValue>>
   > _map;
-  private readonly ForwardingComparer<TKey> _keyComparer;
-  private readonly ForwardingComparer<TValue> _valueComparer;
+  private readonly ForwardingComparer<TKey> _comparer;
   private int _version;
 
   /// <summary>Comparer used for key equality checks.</summary>
-  public IEqualityComparer<TKey> KeyComparer {
-    get => _keyComparer.Comparer;
+  public IEqualityComparer<TKey> Comparer {
+    get => _comparer.Comparer;
     set {
       if (Count > 0) {
         throw new InvalidOperationException(
@@ -36,21 +35,7 @@ public sealed class LinkedHashMap<TKey, TValue> :
         );
       }
 
-      _keyComparer.Comparer = value;
-    }
-  }
-
-  /// <summary>Comparer used for value equality checks.</summary>
-  public IEqualityComparer<TValue> ValueComparer {
-    get => _valueComparer.Comparer;
-    set {
-      if (Count > 0) {
-        throw new InvalidOperationException(
-          "Cannot change a comparer when the map is not empty."
-        );
-      }
-
-      _valueComparer.Comparer = value;
+      _comparer.Comparer = value;
     }
   }
 
@@ -67,23 +52,18 @@ public sealed class LinkedHashMap<TKey, TValue> :
   /// <param name="capacity">Initial capacity. Leave 0 for default HashSet
   /// behavior.
   /// </param>
-  /// <param name="valueComparer">Equality comparer for values.</param>
-  /// <param name="keyComparer">Equality comparer for keys.</param>
+  /// <param name="comparer">Equality comparer for keys.</param>
   public LinkedHashMap(
     int capacity = 0,
-    IEqualityComparer<TKey>? keyComparer = null,
-    IEqualityComparer<TValue>? valueComparer = null
+    IEqualityComparer<TKey>? comparer = null
   ) {
-    _valueComparer = new ForwardingComparer<TValue>(
-      valueComparer ?? EqualityComparer<TValue>.Default
-    );
-    _keyComparer = new ForwardingComparer<TKey>(
-      keyComparer ?? EqualityComparer<TKey>.Default
+    _comparer = new ForwardingComparer<TKey>(
+      comparer ?? EqualityComparer<TKey>.Default
     );
     _list = new LinkedList<KeyValuePair<TKey, TValue>>();
     _map = new Dictionary<
       TKey, LinkedListNode<KeyValuePair<TKey, TValue>>
-    >(capacity, keyComparer);
+    >(capacity, _comparer);
   }
 
   /// <summary>
@@ -95,14 +75,12 @@ public sealed class LinkedHashMap<TKey, TValue> :
   /// <param name="capacity">Initial capacity. Leave 0 for default HashSet
   /// behavior.
   /// </param>
-  /// <param name="valueComparer">Equality comparer for values.</param>
-  /// <param name="keyComparer">Equality comparer for keys.</param>
+  /// <param name="comparer">Equality comparer for keys.</param>
   public LinkedHashMap(
     IEnumerable<KeyValuePair<TKey, TValue>>? collection = null,
     int capacity = 0,
-    IEqualityComparer<TKey>? keyComparer = null,
-    IEqualityComparer<TValue>? valueComparer = null
-  ) : this(capacity, keyComparer, valueComparer) {
+    IEqualityComparer<TKey>? comparer = null
+  ) : this(capacity, comparer) {
     if (collection is ICollection<KeyValuePair<TKey, TValue>> o1) {
       _map.EnsureCapacity(o1.Count);
     }
@@ -222,17 +200,21 @@ public sealed class LinkedHashMap<TKey, TValue> :
 
   /// <inheritdoc />
   public bool Contains(KeyValuePair<TKey, TValue> item) {
-    return
-      _map.TryGetValue(item.Key, out var node) &&
-      ValueComparer.Equals(node.Value.Value, item.Value);
+    if (_map.TryGetValue(item.Key, out var node)) {
+      // standard .NET dictionary uses default equality comparer for values
+      return EqualityComparer<TValue>.Default.Equals(
+        node.Value.Value, item.Value
+      );
+    }
+    return false;
   }
+
   /// <summary>
   /// Checks if the dictionary contains the specified key.
   /// </summary>
   /// <param name="key">Key to look for.</param>
   /// <returns>True if the key is present in the dictionary.</returns>
   public bool ContainsKey(TKey key) => _map.ContainsKey(key);
-
 
   /// <inheritdoc />
   public void CopyTo(KeyValuePair<TKey, TValue>[] array, int arrayIndex) =>
@@ -290,10 +272,14 @@ public sealed class LinkedHashMap<TKey, TValue> :
   /// <param name="item">Key-value pair to remove.</param>
   /// <returns>True if the pair was present and removed.</returns>
   public bool Remove(KeyValuePair<TKey, TValue> item) {
-    if (
-      !_map.TryGetValue(item.Key, out var node) ||
-      !ValueComparer.Equals(node.Value.Value, item.Value)
-    ) {
+    if (!_map.TryGetValue(item.Key, out var node)) {
+      return false;
+    }
+
+    // standard .NET dictionary uses default equality comparer for values
+    if (!EqualityComparer<TValue>.Default.Equals(
+      node.Value.Value, item.Value
+    )) {
       return false;
     }
 
