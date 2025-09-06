@@ -6,7 +6,9 @@ using Chickensoft.Collections;
 using Shouldly;
 using Xunit;
 
-public class NotifierTest {
+
+#pragma warning disable CS0618 // Type or member is obsolete
+public class AutoPropTest {
   public static class Utils {
     public static void ClearWeakReference(WeakReference weakReference) {
       weakReference.Target = null;
@@ -201,3 +203,4 @@ public class NotifierTest {
     syncs.ShouldBe([1, 2, 3]);
   }
 }
+#pragma warning restore CS0618 // Type or member is obsolete

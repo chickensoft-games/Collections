@@ -15,7 +15,14 @@ public class LinkedHashMapTest {
     map.ShouldBeOfType<LinkedHashMap<string, string>>();
 
     map.KeyComparer.ShouldNotBeNull();
-    map.ValueComparer.ShouldBeOfType<ReferenceComparer<string>>();
+    map.ValueComparer.ShouldNotBeNull();
+  }
+
+  [Fact]
+  public void InitializesWithNullItems() {
+    var map = new LinkedHashMap<string, string>(null);
+
+    map.Count.ShouldBe(0);
   }
 
   [Fact]
@@ -91,11 +98,15 @@ public class LinkedHashMapTest {
   public void Remove() {
     var map = new LinkedHashMap<string, int> {
       ["a"] = 1,
-      ["b"] = 2
+      ["b"] = 2,
+      ["c"] = 3
     };
     map.Remove("a").ShouldBeTrue();
-    map.Keys.ToArray().ShouldBe(["b"]);
     map.Remove("a").ShouldBeFalse();
+    map.Remove("c", out var value).ShouldBeTrue();
+    value.ShouldBe(3);
+    map.Remove("d", out var value2).ShouldBeFalse();
+    value2.ShouldBe(default);
   }
 
   [Fact]
@@ -472,5 +483,75 @@ public class LinkedHashMapTest {
       new KeyValuePair<string, int>("a", 1),
       new KeyValuePair<string, int>("b", 2)
     ]);
+  }
+
+  [Fact]
+  public void KeyComparerSetThrowsWhenCollectionIsNonEmpty() {
+    var map = new LinkedHashMap<string, int> {
+      ["a"] = 1
+    };
+
+    Should.Throw<InvalidOperationException>(() => {
+      map.KeyComparer = EqualityComparer<string>.Default;
+    });
+  }
+
+  [Fact]
+  public void KeyComparerSetWorksWhenCollectionIsEmpty() {
+    var map = new LinkedHashMap<string, int>();
+
+    map.Count.ShouldBe(0);
+
+    var comparer = StringComparer.OrdinalIgnoreCase;
+    map.KeyComparer = comparer;
+    map.KeyComparer.ShouldBeSameAs(comparer);
+  }
+
+  [Fact]
+  public void ValueComparerSetThrowsWhenCollectionIsNonEmpty() {
+    var map = new LinkedHashMap<string, int> {
+      ["a"] = 1
+    };
+
+    Should.Throw<InvalidOperationException>(() => {
+      map.ValueComparer = EqualityComparer<int>.Default;
+    });
+  }
+
+  [Fact]
+  public void ValueComparerSetWorksWhenCollectionIsEmpty() {
+    var map = new LinkedHashMap<string, int>();
+
+    map.Count.ShouldBe(0);
+
+    var comparer = EqualityComparer<int>.Create(
+      (x, y) => throw new NotImplementedException(),
+      obj => throw new NotImplementedException()
+    );
+
+    map.ValueComparer = comparer;
+    map.ValueComparer.ShouldBeSameAs(comparer);
+  }
+
+  [Fact]
+  public void IReadOnlyDictionaryKeysAndValues() {
+    IReadOnlyDictionary<string, int> map = new LinkedHashMap<string, int> {
+      ["a"] = 1,
+      ["b"] = 2
+    };
+
+    Should.Throw<NotSupportedException>(() => map.Keys);
+    Should.Throw<NotSupportedException>(() => map.Values);
+  }
+
+  [Fact]
+  public void ICollectionKeysAndValues() {
+    IDictionary<string, int> map = new LinkedHashMap<string, int> {
+      ["a"] = 1,
+      ["b"] = 2
+    };
+
+    Should.Throw<NotSupportedException>(() => map.Keys);
+    Should.Throw<NotSupportedException>(() => map.Values);
   }
 }

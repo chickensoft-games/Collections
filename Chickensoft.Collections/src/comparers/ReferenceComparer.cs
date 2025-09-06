@@ -6,8 +6,7 @@ using System.Collections.Generic;
 /// Comparer that checks for reference equality of objects.
 /// </summary>
 /// <typeparam name="T">Object type.</typeparam>
-public sealed class ReferenceComparer<T> :
-IEqualityComparer<T> {
+public sealed class ReferenceComparer<T> : IEqualityComparer<T> {
   /// <summary>
   /// Default comparer
   /// </summary>

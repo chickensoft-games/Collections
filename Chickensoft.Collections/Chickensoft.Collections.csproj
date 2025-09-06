@@ -15,7 +15,7 @@
     <Title>Chickensoft.Collections</Title>
     <Version>0.0.0-devbuild</Version>
     <Description>Lightweight collections, utilities, and general interface types to help make maintainable code.</Description>
-    <Copyright>© 2024 Chickensoft</Copyright>
+    <Copyright>© 2025 Chickensoft</Copyright>
     <Authors>Chickensoft</Authors>
     <Company>Chickensoft</Company>
 
@@ -46,5 +46,6 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="6.1.2" />
   </ItemGroup>
 </Project>
