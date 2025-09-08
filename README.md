@@ -199,7 +199,7 @@ A typed facade over `OrderedDictionary`. Provides a basic mechanism to store str
 ## AutoProp [**Deprecated**]
 
 > [!CAUTION]
-> `AutoProp<T>` has been deprecated in favor of `AutoValue<T>` from [Chickensoft.Sync].
+> `AutoProp<T>` has been deprecated in favor of `AutoValue<T>` from [Chickensoft.Sync][chickensoft-sync].
 
 AutoProp allows you to make observable properties in the style of `IObservable`, but is implemented over plain C# events and modifies the API to be more ergonomic, *a la Chickensoft style*.
 
@@ -296,4 +296,4 @@ public class MyObject : IDisposable {
 [docs]: https://chickensoft.games/docsickensoft%20Discord-%237289DA.svg?style=flat&logo=discord&logoColor=white
 [line-coverage]: Chickensoft.Collections.Tests/badges/line_coverage.svg
 [branch-coverage]: Chickensoft.Collections.Tests/badges/branch_coverage.svg
-[Chickensoft.Sync]: https://github.com/chickensoft-games/Chickensoft.Sync
+[chickensoft-sync]: https://github.com/chickensoft-games/Sync
