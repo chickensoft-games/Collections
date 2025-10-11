@@ -67,7 +67,7 @@ public class BoxlessQueue<TConformance> {
 
       var item = _queue!.Dequeue();
 
-      handler.HandleValue(item);
+      handler.HandleValue(in item);
     }
 
     public override void Discard() {
