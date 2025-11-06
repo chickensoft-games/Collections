@@ -26,7 +26,8 @@ A simple `LinkedHashSet` implementation is provided that provides basic set sema
 `LinkedHashSet` provides struct enumerators for efficient, allocation-free enumeration.
 
 ```csharp
-  var set = new LinkedHashSet<string>() {
+  var set = new LinkedHashSet<string>()
+  {
     "c",
     "b",
     "a",
@@ -48,7 +49,8 @@ A simple `LinkedHashMap` implementation is provided that provides full dictionar
 > While preserving insertion order can be useful in certain situations, the tradeoff is that a `LinkedList` and a `Dictionary` are both used under the hood as the backing store. While this is lightweight and leverages .NET's efficient collection implementations, the linked list still allocates on the heap for every insertion and violates cache locality. For all but the most intense use cases, this will generally be acceptable where maintaining insertion order is desired. Otherwise, just use .NET's Dictionary<TKey, TValue>.
 
 ```csharp
-  var map = new LinkedHashMap<string, int>() {
+  var map = new LinkedHashMap<string, int>()
+  {
     ["b"] = 2,
     ["a"] = 1,
   };
@@ -91,7 +93,8 @@ var table = new EntityTable<int>();
 table.Set(42, "dolphins");
 
 // Use pattern matching for an optimal experience.
-if (table.Get<string>(42) is { } value) {
+if (table.Get<string>(42) is { } value)
+{
   Console.WriteLine("Dolphins are present.");
 }
 
@@ -105,7 +108,8 @@ var table = new EntityTable();
 
 table.Set("identifier", new object())
 
-if (table.Get<object>("identifier") is { } value) {
+if (table.Get<object>("identifier") is { } value)
+{
   Console.WriteLine("Object is present.");
 }
 ```
@@ -117,8 +121,10 @@ The boxless queue allows you to queue struct values on the heap without boxing t
 To do so, you must make an object which implements the `IBoxlessValueHandler` interface. The `HandleValue` method will be invoked whenever the boxless queue dequeues a value.
 
 ```csharp
-public class MyValueHandler : IBoxlessValueHandler {
-  public void HandleValue<TValue>(in TValue value) where TValue : struct {
+public class MyValueHandler : IBoxlessValueHandler
+{
+  public void HandleValue<TValue>(in TValue value) where TValue : struct
+  {
     Console.WriteLine($"Received value {value}");
   }
 }
@@ -135,7 +141,8 @@ Once you have implemented the `IBoxlessValueHandler`, you can create a boxless q
     queue.Enqueue(valueA);
 
     // See if anything is in the queue.
-    if (queue.HasValues) {
+    if (queue.HasValues)
+    {
       Console.WriteLine("Something in the queue.");
     }
 
@@ -150,7 +157,8 @@ A simple object pool implementation is provided that allows you to pre-allocate 
 Any object you wish to store in a pool must conform to `IPooled` and implement the required `Reset` method. The reset method is called when the object is returned to the pool, allowing you to reset the object's state.
 
 ```csharp
-  public abstract class Shape : IPooled {
+  public abstract class Shape : IPooled
+  {
     public void Reset() { }
   }
 
@@ -188,7 +196,8 @@ A pool can be easily created. Each derived type that you wish to pool can be "re
 A typed facade over `OrderedDictionary`. Provides a basic mechanism to store strongly typed keys and values while preserving key insertion order.
 
 ```csharp
-  var map = new Map<string, int>() {
+  var map = new Map<string, int>()
+  {
     ["b"] = 2,
     ["a"] = 1,
   };
@@ -208,21 +217,24 @@ AutoProps are basically a simplified version of a `BehaviorSubject` that only up
 ```csharp
 using Chickensoft.Collections;
 
-public class MyObject : IDisposable {
+public class MyObject : IDisposable
+{
   // Read-only version exposed as interface.
   public IAutoProp<bool> MyValue => _myValue;
 
   // Read-write version.
   private readonly AutoProp<bool> _myValue = new AutoProp<bool>(false);
 
-  public void Update() {
+  public void Update()
+  {
     // Update our values based on new information.
     _myValue.OnNext(true);
 
     // ...
 
     // Check the latest value.
-    if (_myValue.Value) {
+    if (_myValue.Value)
+    {
       // ...
     }
 
