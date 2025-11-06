@@ -11,7 +11,8 @@ using System.Collections.Generic;
 /// <see cref="Dictionary{TKey, TValue}" /> as the backing store.
 /// </summary>
 /// <typeparam name="T">Item type.</typeparam>
-public sealed class LinkedHashSet<T> : ICollection<T> {
+public sealed class LinkedHashSet<T> : ICollection<T>
+{
   private readonly LinkedList<T> _list;
   private readonly Dictionary<T, LinkedListNode<T>> _map;
   private readonly ForwardingComparer<T> _comparer;
@@ -20,10 +21,13 @@ public sealed class LinkedHashSet<T> : ICollection<T> {
   /// <summary>
   /// Comparer used for equality checks.
   /// </summary>
-  public IEqualityComparer<T> Comparer {
+  public IEqualityComparer<T> Comparer
+  {
     get => _comparer.Comparer;
-    set {
-      if (Count > 0) {
+    set
+    {
+      if (Count > 0)
+      {
         throw new InvalidOperationException(
           "Cannot change the comparer when the set is not empty."
         );
@@ -50,18 +54,21 @@ public sealed class LinkedHashSet<T> : ICollection<T> {
     IEnumerable<T>? collection = null,
     int capacity = 0,
     IEqualityComparer<T>? comparer = null
-  ) {
+  )
+  {
     _comparer = new ForwardingComparer<T>(
       comparer ?? EqualityComparer<T>.Default
     );
     _list = new LinkedList<T>();
     _map = new Dictionary<T, LinkedListNode<T>>(capacity, _comparer);
 
-    if (collection is null) {
+    if (collection is null)
+    {
       return;
     }
 
-    foreach (var item in collection) {
+    foreach (var item in collection)
+    {
       Add(item);
     }
   }
@@ -77,8 +84,10 @@ public sealed class LinkedHashSet<T> : ICollection<T> {
   /// </summary>
   /// <returns>True if the item was added; false if it was already in the set.
   /// </returns>
-  public bool Add(T item) {
-    if (_map.ContainsKey(item)) {
+  public bool Add(T item)
+  {
+    if (_map.ContainsKey(item))
+    {
       return false;
     }
     var node = _list.AddLast(item);
@@ -92,8 +101,10 @@ public sealed class LinkedHashSet<T> : ICollection<T> {
   /// <summary>
   /// Adds all items from the given enumerable to the set.
   /// </summary>
-  public void UnionWith(IEnumerable<T> other) {
-    foreach (var item in other) {
+  public void UnionWith(IEnumerable<T> other)
+  {
+    foreach (var item in other)
+    {
       Add(item);
     }
   }
@@ -101,8 +112,10 @@ public sealed class LinkedHashSet<T> : ICollection<T> {
   /// <summary>
   /// Removes the item from the set.
   /// </summary>
-  public bool Remove(T item) {
-    if (!_map.TryGetValue(item, out var node)) {
+  public bool Remove(T item)
+  {
+    if (!_map.TryGetValue(item, out var node))
+    {
       return false;
     }
     _version++;
@@ -112,7 +125,8 @@ public sealed class LinkedHashSet<T> : ICollection<T> {
   }
 
   /// <inheritdoc />
-  public void Clear() {
+  public void Clear()
+  {
     _version++;
     _list.Clear();
     _map.Clear();
@@ -128,8 +142,10 @@ public sealed class LinkedHashSet<T> : ICollection<T> {
   /// <param name="equalValue">The value to search for.</param>
   /// <param name="actualValue">The actual stored value, if found.</param>
   /// <returns>True if the value was found, false otherwise.</returns>
-  public bool TryGetValue(T equalValue, out T actualValue) {
-    if (_map.TryGetValue(equalValue, out var node)) {
+  public bool TryGetValue(T equalValue, out T actualValue)
+  {
+    if (_map.TryGetValue(equalValue, out var node))
+    {
       actualValue = node.Value;
       return true;
     }
@@ -138,23 +154,22 @@ public sealed class LinkedHashSet<T> : ICollection<T> {
   }
 
   /// <inheritdoc />
-  public void CopyTo(T[] array, int arrayIndex) {
+  public void CopyTo(T[] array, int arrayIndex) =>
     _list.CopyTo(array, arrayIndex);
-  }
 
   #region Enumeration
 
   /// <summary>
   /// Returns a struct-based enumerator over the elements in insertion order.
   /// </summary>
-  public Enumerator GetEnumerator() => new Enumerator(this, _list);
+  public Enumerator GetEnumerator() => new(this, _list);
 
   /// <summary>
   /// Returns a struct-based reverse enumerator over the elements in reverse
   /// insertion order.
   /// </summary>
   public ReverseEnumerator GetReverseEnumerator() =>
-    new ReverseEnumerator(this, _list);
+    new(this, _list);
 
   /// <inheritdoc />
   IEnumerator<T> IEnumerable<T>.GetEnumerator() => GetEnumerator();
@@ -167,13 +182,15 @@ public sealed class LinkedHashSet<T> : ICollection<T> {
   /// <summary>
   /// Struct enumerator that throws if the set is modified during enumeration.
   /// </summary>
-  public struct Enumerator : IEnumerator<T> {
+  public struct Enumerator : IEnumerator<T>
+  {
     private readonly LinkedHashSet<T> _owner;
     private readonly int _version;
     private LinkedListNode<T>? _current;
     private readonly LinkedList<T> _list;
 
-    internal Enumerator(LinkedHashSet<T> owner, LinkedList<T> list) {
+    internal Enumerator(LinkedHashSet<T> owner, LinkedList<T> list)
+    {
       _owner = owner;
       _version = owner._version;
       _list = list;
@@ -185,8 +202,10 @@ public sealed class LinkedHashSet<T> : ICollection<T> {
     readonly object IEnumerator.Current => _current!.Value!;
 
     /// <inheritdoc />
-    public bool MoveNext() {
-      if (_owner._version != _version) {
+    public bool MoveNext()
+    {
+      if (_owner._version != _version)
+      {
         throw new InvalidOperationException(
         "LinkedHashSet was modified during enumeration."
         );
@@ -196,27 +215,25 @@ public sealed class LinkedHashSet<T> : ICollection<T> {
     }
 
     /// <inheritdoc />
-    public void Reset() {
-      _current = null;
-    }
+    public void Reset() => _current = null;
 
     /// <inheritdoc />
-    public void Dispose() {
-      Reset();
-    }
+    public void Dispose() => Reset();
   }
 
   /// <summary>
   /// A reverse struct enumerator that throws if the set is modified during
   /// enumeration.
   /// </summary>
-  public struct ReverseEnumerator : IEnumerator<T> {
+  public struct ReverseEnumerator : IEnumerator<T>
+  {
     private readonly LinkedHashSet<T> _owner;
     private readonly int _version;
     private LinkedListNode<T>? _current;
     private readonly LinkedList<T> _list;
 
-    internal ReverseEnumerator(LinkedHashSet<T> owner, LinkedList<T> list) {
+    internal ReverseEnumerator(LinkedHashSet<T> owner, LinkedList<T> list)
+    {
       _owner = owner;
       _version = owner._version;
       _list = list;
@@ -228,8 +245,10 @@ public sealed class LinkedHashSet<T> : ICollection<T> {
     readonly object IEnumerator.Current => _current!.Value!;
 
     /// <inheritdoc />
-    public bool MoveNext() {
-      if (_owner._version != _version) {
+    public bool MoveNext()
+    {
+      if (_owner._version != _version)
+      {
         throw new InvalidOperationException(
         "LinkedHashSet was modified during enumeration."
         );
@@ -239,13 +258,9 @@ public sealed class LinkedHashSet<T> : ICollection<T> {
     }
 
     /// <inheritdoc />
-    public void Reset() {
-      _current = null;
-    }
+    public void Reset() => _current = null;
 
     /// <inheritdoc />
-    public void Dispose() {
-      Reset();
-    }
+    public void Dispose() => Reset();
   }
 }

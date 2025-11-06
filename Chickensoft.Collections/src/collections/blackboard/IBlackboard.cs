@@ -8,7 +8,8 @@ using System.Data;
 /// A blackboard is a table of data. Data is accessed by its type and shared
 /// between logic block states.
 /// </summary>
-public interface IBlackboard : IReadOnlyBlackboard {
+public interface IBlackboard : IReadOnlyBlackboard
+{
   /// <summary>
   /// Adds data to the blackboard so that it can be looked up by its
   /// compile-time type.

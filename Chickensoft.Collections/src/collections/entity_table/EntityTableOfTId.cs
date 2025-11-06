@@ -8,7 +8,8 @@ using System.Collections.Concurrent;
 /// the entity is of that type.
 /// </summary>
 /// <typeparam name="TId">Key type.</typeparam>
-public class EntityTable<TId> where TId : notnull {
+public class EntityTable<TId> where TId : notnull
+{
   private readonly ConcurrentDictionary<TId, object> _entities = new();
 
   /// <summary>
@@ -30,8 +31,10 @@ public class EntityTable<TId> where TId : notnull {
   /// Remove an entity from the table.
   /// </summary>
   /// <param name="id">Entity id.</param>
-  public void Remove(TId? id) {
-    if (id is null) { return; }
+  public void Remove(TId? id)
+  {
+    if (id is null)
+    { return; }
 
     _entities.TryRemove(id, out _);
   }
@@ -49,12 +52,14 @@ public class EntityTable<TId> where TId : notnull {
   /// <param name="id"></param>
   /// <returns>Entity with the associated id as the given type, if the entity
   /// exists and is of that type.</returns>
-  public TUsage? Get<TUsage>(TId? id) where TUsage : class {
+  public TUsage? Get<TUsage>(TId? id) where TUsage : class
+  {
     if (
       id is not null &&
       _entities.TryGetValue(id, out var entity) &&
       entity is TUsage expected
-    ) {
+    )
+    {
       return expected;
     }
 

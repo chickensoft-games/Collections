@@ -3,15 +3,18 @@ namespace Chickensoft.Collections.Tests;
 using Shouldly;
 using Xunit;
 
-public class EntityTableTest {
+public class EntityTableTest
+{
   [Fact]
-  public void Initializes() {
+  public void Initializes()
+  {
     new EntityTable<int>().ShouldBeAssignableTo<EntityTable<int>>();
     new EntityTable().ShouldBeAssignableTo<EntityTable<string>>();
   }
 
   [Fact]
-  public void SetStoresValuesAndOverwritesExistingValues() {
+  public void SetStoresValuesAndOverwritesExistingValues()
+  {
     var table = new EntityTable();
 
     table.Set("a", "one");
@@ -31,7 +34,8 @@ public class EntityTableTest {
   }
 
   [Fact]
-  public void TryAddOnlyStoresValuesForNewKeys() {
+  public void TryAddOnlyStoresValuesForNewKeys()
+  {
     var table = new EntityTable();
 
     table.TryAdd("a", "one").ShouldBeTrue();
@@ -40,7 +44,8 @@ public class EntityTableTest {
   }
 
   [Fact]
-  public void Clears() {
+  public void Clears()
+  {
     var table = new EntityTable();
 
     table.Set("a", "one");

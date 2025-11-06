@@ -6,7 +6,8 @@ using System.Collections.Generic;
 /// Comparer that checks for reference equality of objects.
 /// </summary>
 /// <typeparam name="T">Object type.</typeparam>
-public sealed class ReferenceComparer<T> : IEqualityComparer<T> {
+public sealed class ReferenceComparer<T> : IEqualityComparer<T>
+{
   /// <summary>
   /// Default comparer
   /// </summary>
@@ -19,7 +20,6 @@ public sealed class ReferenceComparer<T> : IEqualityComparer<T> {
   public bool Equals(T x, T y) => ReferenceEquals(x, y);
 
   /// <inheritdoc />
-  public int GetHashCode(T obj) {
-    return System.Runtime.CompilerServices.RuntimeHelpers.GetHashCode(obj);
-  }
+  public int GetHashCode(T obj) =>
+    System.Runtime.CompilerServices.RuntimeHelpers.GetHashCode(obj);
 }

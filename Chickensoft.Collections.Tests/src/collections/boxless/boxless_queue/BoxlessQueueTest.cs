@@ -5,12 +5,14 @@ using Chickensoft.Collections;
 using Shouldly;
 using Xunit;
 
-public class BoxlessQueueTests {
+public class BoxlessQueueTests
+{
   public readonly record struct ValueA(int Id);
   public readonly record struct ValueB(int Id);
   public readonly record struct ValueC(int Id);
 
-  public readonly struct TestValueHandler : IBoxlessValueHandler {
+  public readonly struct TestValueHandler : IBoxlessValueHandler
+  {
     public List<object> Values { get; }
 
     public TestValueHandler() { Values = []; }
@@ -20,14 +22,16 @@ public class BoxlessQueueTests {
   }
 
   [Fact]
-  public void Initializes() {
+  public void Initializes()
+  {
     var queue = new BoxlessQueue();
 
     queue.ShouldBeOfType<BoxlessQueue>();
   }
 
   [Fact]
-  public void EnqueueAndHandleValues() {
+  public void EnqueueAndHandleValues()
+  {
     var handler = new TestValueHandler();
     var queue = new BoxlessQueue();
 
@@ -64,8 +68,8 @@ public class BoxlessQueueTests {
   }
 
   [Fact]
-  public void ClearQueue() {
-    var handler = new TestValueHandler();
+  public void ClearQueue()
+  {
     var queue = new BoxlessQueue();
 
     queue.Enqueue(new ValueA());
@@ -77,7 +81,8 @@ public class BoxlessQueueTests {
   }
 
   [Fact]
-  public void Peeks() {
+  public void Peeks()
+  {
     var handler = new TestValueHandler();
     var queue = new BoxlessQueue();
 
@@ -143,7 +148,8 @@ public class BoxlessQueueTests {
   }
 
   [Fact]
-  public void CannotDiscardOutOfRange() {
+  public void CannotDiscardOutOfRange()
+  {
     var queue = new BoxlessQueue();
 
     queue.Enqueue(new ValueA());

@@ -19,20 +19,23 @@ using System.Linq;
 public class Map<TKey, TValue> :
   IDictionary<TKey, TValue>,
   IReadOnlyDictionary<TKey, TValue>
-  where TKey : notnull {
+  where TKey : notnull
+{
 
   private readonly OrderedDictionary _collection = [];
 
   /// <summary>Retrieve a map value by key.</summary>
   /// <param name="key">Map key.</param>
-  public TValue this[TKey key] {
+  public TValue this[TKey key]
+  {
     get => (TValue)_collection[key];
     set => _collection[key] = value;
   }
 
   /// <summary>Retrieve a map value by index.</summary>
   /// <param name="index">Index of the value to access.</param>
-  public TValue? this[int index] {
+  public TValue? this[int index]
+  {
     get => (TValue?)_collection[index];
     set => _collection[index] = value;
   }
@@ -58,8 +61,10 @@ public class Map<TKey, TValue> :
   /// <param name="collection">An enumerable of key-value-pairs which should
   /// be added to the map initially.
   /// </param>
-  public Map(IEnumerable<KeyValuePair<TKey, TValue>> collection) {
-    foreach (var item in collection) {
+  public Map(IEnumerable<KeyValuePair<TKey, TValue>> collection)
+  {
+    foreach (var item in collection)
+    {
       _collection.Add(item.Key, item.Value);
     }
   }
@@ -109,9 +114,12 @@ public class Map<TKey, TValue> :
   public bool ContainsKey(TKey key) => _collection.Contains(key);
 
   /// <inheritdoc />
-  public bool Remove(TKey key) {
-    lock (_collection) {
-      if (_collection.Contains(key)) {
+  public bool Remove(TKey key)
+  {
+    lock (_collection)
+    {
+      if (_collection.Contains(key))
+      {
         _collection.Remove(key);
         return true;
       }
@@ -120,9 +128,12 @@ public class Map<TKey, TValue> :
   }
 
   /// <inheritdoc />
-  public bool TryGetValue(TKey key, out TValue value) {
-    lock (_collection) {
-      if (_collection.Contains(key)) {
+  public bool TryGetValue(TKey key, out TValue value)
+  {
+    lock (_collection)
+    {
+      if (_collection.Contains(key))
+      {
         value = (TValue)_collection[key];
         return true;
       }
@@ -136,8 +147,10 @@ public class Map<TKey, TValue> :
     _collection.Add(item.Key, item.Value);
 
   /// <inheritdoc />
-  public bool Contains(KeyValuePair<TKey, TValue> item) {
-    lock (_collection) {
+  public bool Contains(KeyValuePair<TKey, TValue> item)
+  {
+    lock (_collection)
+    {
       return _collection.Contains(item.Key) &&
       EqualityComparer<object?>.Default.Equals(
         _collection[item.Key], item.Value
@@ -146,9 +159,12 @@ public class Map<TKey, TValue> :
   }
 
   /// <inheritdoc />
-  public void CopyTo(KeyValuePair<TKey, TValue>[] array, int arrayIndex) {
-    lock (_collection) {
-      foreach (DictionaryEntry entry in _collection) {
+  public void CopyTo(KeyValuePair<TKey, TValue>[] array, int arrayIndex)
+  {
+    lock (_collection)
+    {
+      foreach (DictionaryEntry entry in _collection)
+      {
         array[arrayIndex++] = new KeyValuePair<TKey, TValue>(
           (TKey)entry.Key, (TValue)entry.Value
         );
@@ -157,9 +173,12 @@ public class Map<TKey, TValue> :
   }
 
   /// <inheritdoc />
-  public bool Remove(KeyValuePair<TKey, TValue> item) {
-    lock (_collection) {
-      if (Contains(item)) {
+  public bool Remove(KeyValuePair<TKey, TValue> item)
+  {
+    lock (_collection)
+    {
+      if (Contains(item))
+      {
         _collection.Remove(item.Key);
         return true;
       }
@@ -171,8 +190,10 @@ public class Map<TKey, TValue> :
   IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
   /// <inheritdoc />
-  public IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator() {
-    foreach (DictionaryEntry entry in _collection) {
+  public IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator()
+  {
+    foreach (DictionaryEntry entry in _collection)
+    {
       yield return new KeyValuePair<TKey, TValue>(
         (TKey)entry.Key, (TValue)entry.Value
       );

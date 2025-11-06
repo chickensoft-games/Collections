@@ -3,13 +3,16 @@ namespace Chickensoft.Collections.Tests;
 using Shouldly;
 using Xunit;
 
-public sealed class ReferenceComparerTest {
-  private sealed class TestClass {
+public sealed class ReferenceComparerTest
+{
+  private sealed class TestClass
+  {
     public int Value { get; set; }
   }
 
   [Fact]
-  public void ComparesAndHashes() {
+  public void ComparesAndHashes()
+  {
     ReferenceComparer<TestClass>.Default.Equals(
       new TestClass(),
       new TestClass()

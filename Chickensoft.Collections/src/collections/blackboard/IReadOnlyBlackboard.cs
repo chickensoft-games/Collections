@@ -7,7 +7,8 @@ using System.Collections.Generic;
 /// A read-only blackboard. A blackboard is a table of data. Data is accessed by
 /// its type and shared between logic block states.
 /// </summary>
-public interface IReadOnlyBlackboard {
+public interface IReadOnlyBlackboard
+{
   /// <summary>All types present in the blackboard.</summary>
   /// <returns>Enumerable types present in the blackboard.</returns>
   IReadOnlySet<Type> Types { get; }

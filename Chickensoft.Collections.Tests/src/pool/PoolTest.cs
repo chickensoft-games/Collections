@@ -4,8 +4,10 @@ using System;
 using Shouldly;
 using Xunit;
 
-public class PoolTest {
-  public abstract class Shape : IPooled {
+public class PoolTest
+{
+  public abstract class Shape : IPooled
+  {
     public void Reset() { }
   }
 
@@ -13,7 +15,8 @@ public class PoolTest {
   public class Sphere : Shape { }
 
   [Fact]
-  public void InitializesAndRegisters() {
+  public void InitializesAndRegisters()
+  {
     var pool = new Pool<Shape>();
 
     pool.Register<Cube>();
@@ -24,7 +27,8 @@ public class PoolTest {
   }
 
   [Fact]
-  public void ThrowsIfRegisteringDuplicateType() {
+  public void ThrowsIfRegisteringDuplicateType()
+  {
     var pool = new Pool<Shape>();
 
     pool.Register<Cube>();
@@ -33,14 +37,16 @@ public class PoolTest {
   }
 
   [Fact]
-  public void ThrowsIfGettingUnregisteredType() {
+  public void ThrowsIfGettingUnregisteredType()
+  {
     var pool = new Pool<Shape>();
 
     Should.Throw<InvalidOperationException>(pool.Get<Cube>);
   }
 
   [Fact]
-  public void CreatesNewInstancesIfPoolIsEmpty() {
+  public void CreatesNewInstancesIfPoolIsEmpty()
+  {
     var pool = new Pool<Shape>();
 
     pool.Register<Cube>();
@@ -52,14 +58,16 @@ public class PoolTest {
   }
 
   [Fact]
-  public void ReturnThrowsIfTypeNotRegistered() {
+  public void ReturnThrowsIfTypeNotRegistered()
+  {
     var pool = new Pool<Shape>();
 
     Should.Throw<InvalidOperationException>(() => pool.Return(new Cube()));
   }
 
   [Fact]
-  public void ReturnResetsAndEnqueues() {
+  public void ReturnResetsAndEnqueues()
+  {
     var pool = new Pool<Shape>();
 
     pool.Register<Cube>();
@@ -74,7 +82,8 @@ public class PoolTest {
   }
 
   [Fact]
-  public void AllowsNullReturns() {
+  public void AllowsNullReturns()
+  {
     var pool = new Pool<Shape>();
 
     pool.Register<Cube>();

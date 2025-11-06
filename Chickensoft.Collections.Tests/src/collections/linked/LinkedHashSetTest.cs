@@ -9,21 +9,23 @@ using Xunit;
 
 #pragma warning disable IDE0028 // don't change collection semantics on me
 
-public class LinkedHashSetTest {
+public class LinkedHashSetTest
+{
   [Fact]
-  public void Initializes() {
+  public void Initializes()
+  {
     var set = new LinkedHashSet<string>();
 
     set.ShouldBeOfType<LinkedHashSet<string>>();
   }
 
   [Fact]
-  public void IsReadOnly() {
+  public void IsReadOnly() =>
     new LinkedHashSet<int>().IsReadOnly.ShouldBe(false);
-  }
 
   [Fact]
-  public void AddAndCount() {
+  public void AddAndCount()
+  {
     var set = new LinkedHashSet<string>();
 
     set.Count.ShouldBe(0);
@@ -38,7 +40,8 @@ public class LinkedHashSetTest {
   }
 
   [Fact]
-  public void IEnumerable() {
+  public void IEnumerable()
+  {
     var set = new LinkedHashSet<int> { 1, 2, 3 } as IEnumerable;
 
     // boxed since we access as IEnumerable, but still the right thing.
@@ -46,7 +49,8 @@ public class LinkedHashSetTest {
   }
 
   [Fact]
-  public void ContainsAndRemove() {
+  public void ContainsAndRemove()
+  {
     var set = new LinkedHashSet<int>();
     set.Add(1).ShouldBe(true);
     set.Contains(1).ShouldBe(true);
@@ -59,7 +63,8 @@ public class LinkedHashSetTest {
   }
 
   [Fact]
-  public void Clear() {
+  public void Clear()
+  {
     var set = new LinkedHashSet<int> { 1, 2, 3 };
     set.Clear();
     set.Count.ShouldBe(0);
@@ -67,7 +72,8 @@ public class LinkedHashSetTest {
   }
 
   [Fact]
-  public void CopyTo() {
+  public void CopyTo()
+  {
     var set = new LinkedHashSet<string> { "a", "b", "c" };
     var array = new string[3];
     set.CopyTo(array, 0);
@@ -75,7 +81,8 @@ public class LinkedHashSetTest {
   }
 
   [Fact]
-  public void CopyToThrowsOnInvalidArgs() {
+  public void CopyToThrowsOnInvalidArgs()
+  {
     var set = new LinkedHashSet<int> { 1 };
     // negative index
     Should.Throw<ArgumentOutOfRangeException>(() => set.CopyTo(new int[1], -1));
@@ -84,7 +91,8 @@ public class LinkedHashSetTest {
   }
 
   [Fact]
-  public void EnumeratorOrdersItems() {
+  public void EnumeratorOrdersItems()
+  {
     var set = new LinkedHashSet<char> { 'b', 'a', 'c' };
     var enumerator = set.GetEnumerator();
 
@@ -101,7 +109,8 @@ public class LinkedHashSetTest {
   }
 
   [Fact]
-  public void EnumeratorThrowsIfModified() {
+  public void EnumeratorThrowsIfModified()
+  {
     var set = new LinkedHashSet<int> { 1, 2 };
 
     var enumerator = set.GetEnumerator();
@@ -113,7 +122,8 @@ public class LinkedHashSetTest {
   }
 
   [Fact]
-  public void ReverseEnumeratorOrdersItems() {
+  public void ReverseEnumeratorOrdersItems()
+  {
     var set = new LinkedHashSet<int> { 1, 2, 3 };
     var enumerator = set.GetReverseEnumerator();
 
@@ -132,7 +142,8 @@ public class LinkedHashSetTest {
   }
 
   [Fact]
-  public void ReverseEnumeratorThrowsIfModified() {
+  public void ReverseEnumeratorThrowsIfModified()
+  {
     var set = new LinkedHashSet<int> { 1, 2 };
     var enumerator = set.GetReverseEnumerator();
 
@@ -142,11 +153,13 @@ public class LinkedHashSetTest {
   }
 
   [Fact]
-  public void IEnumerableEnumeration() {
+  public void IEnumerableEnumeration()
+  {
     IEnumerable<int> set = new LinkedHashSet<int> { 1, 2, 3 };
     var list = new List<int>();
 
-    foreach (var item in set) {
+    foreach (var item in set)
+    {
       list.Add(item);
     }
 
@@ -154,20 +167,23 @@ public class LinkedHashSetTest {
   }
 
   [Fact]
-  public void ConstructorWithCollection() {
+  public void ConstructorWithCollection()
+  {
     var items = new List<int> { 3, 1, 2, 1 };
     var set = new LinkedHashSet<int>(items);
     set.ToList().ShouldBe([3, 1, 2]);
   }
 
   [Fact]
-  public void CollectionInitializerPreservesOrderAndUniqueness() {
+  public void CollectionInitializerPreservesOrderAndUniqueness()
+  {
     var set = new LinkedHashSet<string> { "x", "y", "x", "z" };
     set.ToList().ShouldBe(["x", "y", "z"]);
   }
 
   [Fact]
-  public void ResetEnumeratorAndEnumerateAgain() {
+  public void ResetEnumeratorAndEnumerateAgain()
+  {
     var set = new LinkedHashSet<int> { 10, 20 };
     using var enumerator = set.GetEnumerator();
 
@@ -182,7 +198,8 @@ public class LinkedHashSetTest {
   }
 
   [Fact]
-  public void ResetReverseEnumeratorAndEnumerateAgain() {
+  public void ResetReverseEnumeratorAndEnumerateAgain()
+  {
     var set = new LinkedHashSet<int> { 10, 20 };
     using var enumerator = set.GetReverseEnumerator();
 
@@ -197,14 +214,16 @@ public class LinkedHashSetTest {
   }
 
   [Fact]
-  public void ICollectionAddWorks() {
+  public void ICollectionAddWorks()
+  {
     ICollection<string> coll = new LinkedHashSet<string>();
     coll.Add("a");
     coll.Contains("a").ShouldBe(true);
   }
 
   [Fact]
-  public void RemoveThenAddChangesOrder() {
+  public void RemoveThenAddChangesOrder()
+  {
     var set = new LinkedHashSet<char> { 'a', 'b', 'c' };
     set.Remove('a').ShouldBe(true);
     set.Add('a').ShouldBe(true);
@@ -213,22 +232,26 @@ public class LinkedHashSetTest {
   }
 
   [Fact]
-  public void ComparerSetThrowsWhenCollectionIsNonEmpty() {
-    Should.Throw<InvalidOperationException>(() => {
+  public void ComparerSetThrowsWhenCollectionIsNonEmpty()
+  {
+    Should.Throw<InvalidOperationException>(() =>
+    {
       var set = new LinkedHashSet<int> { 1, 2, 3 };
       set.Comparer = EqualityComparer<int>.Default;
     });
   }
 
   [Fact]
-  public void ComparerSetWorksWhenCollectionIsEmpty() {
+  public void ComparerSetWorksWhenCollectionIsEmpty()
+  {
     var set = new LinkedHashSet<int>();
     Should.NotThrow(() => set.Comparer = EqualityComparer<int>.Default);
     set.Comparer.ShouldBe(EqualityComparer<int>.Default);
   }
 
   [Fact]
-  public void UnionWithAddsMissingItems() {
+  public void UnionWithAddsMissingItems()
+  {
     var set = new LinkedHashSet<int> { 1, 2, 3 };
     set.UnionWith([3, 4, 5]);
 
@@ -236,7 +259,8 @@ public class LinkedHashSetTest {
   }
 
   [Fact]
-  public void TryGetValue() {
+  public void TryGetValue()
+  {
     var set = new LinkedHashSet<string>(
       ["one", "two", "three"], comparer: StringComparer.OrdinalIgnoreCase
     );
