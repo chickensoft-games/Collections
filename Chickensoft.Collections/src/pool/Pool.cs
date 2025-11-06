@@ -10,7 +10,8 @@ using System.Collections.Generic;
 /// it is removed from the pool. When an object is returned, it is reset and
 /// placed back into the pool.
 /// </summary>
-public class Pool<T> {
+public class Pool<T>
+{
   private readonly ConcurrentDictionary<Type, ConcurrentQueue<T>>
     _pool = [];
   private readonly Dictionary<Type, Func<T>> _factories = [];
@@ -32,17 +33,21 @@ public class Pool<T> {
   public void Register<TDerived>(
     Func<TDerived> factory, int capacity = 1
   )
-  where TDerived : T {
+  where TDerived : T
+  {
     var type = typeof(TDerived);
     var queue = new ConcurrentQueue<T>();
 
-    for (var i = 0; i < capacity; i++) {
+    for (var i = 0; i < capacity; i++)
+    {
       var item = factory();
       queue.Enqueue(item);
     }
 
-    lock (_pool) {
-      if (!_pool.TryAdd(type, queue)) {
+    lock (_pool)
+    {
+      if (!_pool.TryAdd(type, queue))
+      {
         throw new InvalidOperationException(
           $"Type `{type}` is already registered."
         );
@@ -61,12 +66,15 @@ public class Pool<T> {
   /// <summary>Borrows an object from the pool.</summary>
   /// <param name="type">The type of object to borrow.</param>
   /// <returns>An object of the specified type.</returns>
-  public T Get(Type type) {
-    if (!_pool.TryGetValue(type, out var queue)) {
+  public T Get(Type type)
+  {
+    if (!_pool.TryGetValue(type, out var queue))
+    {
       throw new InvalidOperationException($"Type `{type}` is not registered.");
     }
 
-    if (queue.TryDequeue(out var item)) {
+    if (queue.TryDequeue(out var item))
+    {
       return item;
     }
 
@@ -77,16 +85,20 @@ public class Pool<T> {
   /// <summary>Returns an object to the pool.</summary>
   /// <param name="item">The object to return.</param>
   /// <exception cref="InvalidOperationException" />
-  public void Return(T item) {
-    if (item is null) { return; }
+  public void Return(T item)
+  {
+    if (item is null)
+    { return; }
 
     var type = item.GetType();
 
-    if (!_pool.TryGetValue(type, out var queue)) {
+    if (!_pool.TryGetValue(type, out var queue))
+    {
       throw new InvalidOperationException($"Type `{type}` is not registered.");
     }
 
-    if (item is IPooled pooled) {
+    if (item is IPooled pooled)
+    {
       pooled.Reset();
     }
 

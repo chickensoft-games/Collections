@@ -35,7 +35,8 @@ using System.Collections.Generic;
 /// the property. Errors can be pushed more than once and do not throw.
 /// </summary>
 /// <typeparam name="T">Type of the value to observe.</typeparam>
-public interface IAutoProp<T> {
+public interface IAutoProp<T>
+{
   /// <summary>
   /// Current value of the property. This is always the most up-to-date value
   /// at any given moment.
@@ -108,13 +109,16 @@ public interface IAutoProp<T> {
   "Superseded by AutoValue in Chickensoft's reactive coding library, " +
   "Chickensoft.Sync."
 )]
-public sealed class AutoProp<T> : IDisposable, IAutoProp<T> {
+public sealed class AutoProp<T> : IDisposable, IAutoProp<T>
+{
   /// <inheritdoc />
   public event Action<T>? Changed;
 
   /// <inheritdoc />
-  public event Action<T>? Sync {
-    add {
+  public event Action<T>? Sync
+  {
+    add
+    {
       InternalSync += value;
       value?.Invoke(Value);
     }
@@ -143,7 +147,8 @@ public sealed class AutoProp<T> : IDisposable, IAutoProp<T> {
   /// Creates a new auto property with the given value.
   /// </summary>
   /// <param name="value">Initial value.</param>
-  public AutoProp(T value) {
+  public AutoProp(T value)
+  {
     Value = value;
     Comparer = EqualityComparer<T>.Default;
   }
@@ -153,7 +158,8 @@ public sealed class AutoProp<T> : IDisposable, IAutoProp<T> {
   /// </summary>
   /// <param name="value">Initial value.</param>
   /// <param name="comparer">Equality comparer to use.</param>
-  public AutoProp(T value, IEqualityComparer<T> comparer) {
+  public AutoProp(T value, IEqualityComparer<T> comparer)
+  {
     Value = value;
     Comparer = comparer;
   }
@@ -164,20 +170,26 @@ public sealed class AutoProp<T> : IDisposable, IAutoProp<T> {
   /// handlers will be invoked.
   /// </summary>
   /// <param name="value">New value.</param>
-  public void OnNext(T value) {
-    if (_completed) { return; }
+  public void OnNext(T value)
+  {
+    if (_completed)
+    { return; }
 
     _pending.Enqueue(value);
 
-    if (_busy) { return; }
+    if (_busy)
+    { return; }
 
-    lock (_pending) {
+    lock (_pending)
+    {
       _busy = true;
 
-      while (_pending.Count > 0 && !_completed) {
+      while (_pending.Count > 0 && !_completed)
+      {
         var next = _pending.Dequeue();
 
-        if (Comparer.Equals(Value, next)) {
+        if (Comparer.Equals(Value, next))
+        {
           continue;
         }
 
@@ -194,8 +206,10 @@ public sealed class AutoProp<T> : IDisposable, IAutoProp<T> {
   /// Marks the property as completed. This will prevent any further values
   /// from being pushed to the property.
   /// </summary>
-  public void OnCompleted() {
-    if (_completed) { return; }
+  public void OnCompleted()
+  {
+    if (_completed)
+    { return; }
 
     _completed = true;
     _pending.Clear();
@@ -210,14 +224,17 @@ public sealed class AutoProp<T> : IDisposable, IAutoProp<T> {
   /// property.
   /// </summary>
   /// <param name="error">Error to push.</param>
-  public void OnError(Exception error) {
-    if (_completed) { return; }
+  public void OnError(Exception error)
+  {
+    if (_completed)
+    { return; }
 
     Error?.Invoke(error);
   }
 
   /// <summary>Clears all event handlers.</summary>
-  public void Clear() {
+  public void Clear()
+  {
     // Assigning events to null clears registered event handlers.
     // https://stackoverflow.com/a/36084493
     Changed = null;
@@ -226,12 +243,15 @@ public sealed class AutoProp<T> : IDisposable, IAutoProp<T> {
     Error = null;
   }
 
-  private void Dispose(bool disposing) {
-    if (_disposed) {
+  private void Dispose(bool disposing)
+  {
+    if (_disposed)
+    {
       return;
     }
 
-    if (disposing) {
+    if (disposing)
+    {
       Clear();
     }
 
@@ -239,13 +259,15 @@ public sealed class AutoProp<T> : IDisposable, IAutoProp<T> {
   }
 
   /// <inheritdoc />
-  public void Dispose() {
+  public void Dispose()
+  {
     Dispose(true);
     GC.SuppressFinalize(this);
   }
 
   /// <summary>Finalizer.</summary>
-  ~AutoProp() {
+  ~AutoProp()
+  {
     Dispose(false);
   }
 }

@@ -5,7 +5,8 @@ using System;
 /// <summary>
 /// Interface for handling values stored in a <see cref="BoxlessQueue"/>.
 /// </summary>
-public interface IBoxlessValueHandler<TConformance> {
+public interface IBoxlessValueHandler<TConformance>
+{
   /// <summary>
   /// Callback invoked when a value is dequeued from a
   /// <see cref="BoxlessQueue"/>.

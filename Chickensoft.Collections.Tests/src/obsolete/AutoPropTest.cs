@@ -8,9 +8,12 @@ using Xunit;
 
 
 #pragma warning disable CS0618 // Type or member is obsolete
-public class AutoPropTest {
-  public static class Utils {
-    public static void ClearWeakReference(WeakReference weakReference) {
+public class AutoPropTest
+{
+  public static class Utils
+  {
+    public static void ClearWeakReference(WeakReference weakReference)
+    {
       weakReference.Target = null;
       GC.Collect();
       GC.WaitForPendingFinalizers();
@@ -22,26 +25,30 @@ public class AutoPropTest {
   );
 
   [Fact]
-  public void Initializes() {
+  public void Initializes()
+  {
     var subject = new AutoProp<int>(1);
     subject.Value.ShouldBe(1);
   }
 
   [Fact]
-  public void InitializesWithComparer() {
+  public void InitializesWithComparer()
+  {
     var subject = new AutoProp<int>(1, EqualityComparer<int>.Default);
     subject.Value.ShouldBe(1);
     subject.Comparer.ShouldBe(EqualityComparer<int>.Default);
   }
 
   [Fact]
-  public void SyncCallsHandlerImmediatelyAndAllowsUnsubscribe() {
+  public void SyncCallsHandlerImmediatelyAndAllowsUnsubscribe()
+  {
     using var subject = new AutoProp<int>(1);
 
     var changedCalled = 0;
     var syncCalled = 0;
 
-    void onSync(int value) {
+    void onSync(int value)
+    {
       value.ShouldBe(1);
       syncCalled++;
     }
@@ -59,7 +66,8 @@ public class AutoPropTest {
   }
 
   [Fact]
-  public void ClearsEventHandlers() {
+  public void ClearsEventHandlers()
+  {
     using var subject = new AutoProp<int>(1);
 
     var changedCalled = 0;
@@ -85,7 +93,8 @@ public class AutoPropTest {
   }
 
   [Fact]
-  public void CompletesAndBlocksOtherActions() {
+  public void CompletesAndBlocksOtherActions()
+  {
     using var subject = new AutoProp<int>(1);
 
     var changedCalled = 0;
@@ -111,12 +120,14 @@ public class AutoPropTest {
   }
 
   [Fact]
-  public void CallsErrorHandler() {
+  public void CallsErrorHandler()
+  {
     using var subject = new AutoProp<int>(1);
 
     var errorCalled = 0;
 
-    void onError(Exception exception) {
+    void onError(Exception exception)
+    {
       exception.ShouldBeOfType<InvalidOperationException>();
       errorCalled++;
     }
@@ -133,7 +144,8 @@ public class AutoPropTest {
   }
 
   [Fact]
-  public void DisposesCorrectly() {
+  public void DisposesCorrectly()
+  {
     var subject = new AutoProp<int>(1);
 
     var changedCalled = 0;
@@ -160,7 +172,8 @@ public class AutoPropTest {
   }
 
   [Fact]
-  public void Finalizes() {
+  public void Finalizes()
+  {
     // Weak reference has to be created and cleared from a static function
     // or else the GC won't ever collect it :P
     var subject = CreateWeakReference();
@@ -168,7 +181,8 @@ public class AutoPropTest {
   }
 
   [Fact]
-  public void DoesNotCallHandlersIfValueHasNotChanged() {
+  public void DoesNotCallHandlersIfValueHasNotChanged()
+  {
     var subject = new AutoProp<int>(1);
 
     var changedCalled = 0;
@@ -185,13 +199,15 @@ public class AutoPropTest {
   }
 
   [Fact]
-  public void DoesNotCallHandlerWhileInsideHandler() {
+  public void DoesNotCallHandlerWhileInsideHandler()
+  {
     var subject = new AutoProp<int>(1);
 
     var changes = new List<int>();
     var syncs = new List<int>();
 
-    subject.Changed += (value) => {
+    subject.Changed += (value) =>
+    {
       changes.Add(value);
       subject.OnNext(3);
     };

@@ -8,22 +8,27 @@ using Xunit;
 
 #pragma warning disable CS0618 // obsolete
 
-public class MapTest {
+public class MapTest
+{
   [Fact]
   public void Initializes()
     => new Map<string, string>().ShouldBeOfType<Map<string, string>>();
 
   [Fact]
-  public void GetsAndSetsKeys() {
-    var map = new Map<string, int> {
+  public void GetsAndSetsKeys()
+  {
+    var map = new Map<string, int>
+    {
       ["a"] = 1
     };
     map["a"].ShouldBe(1);
   }
 
   [Fact]
-  public void GetsAndSetsKeysByIndex() {
-    var map = new Map<string, int> {
+  public void GetsAndSetsKeysByIndex()
+  {
+    var map = new Map<string, int>
+    {
       ["a"] = 1
     };
     map[0].ShouldBe(1);
@@ -33,13 +38,15 @@ public class MapTest {
   }
 
   [Fact]
-  public void IsReadOnly() {
+  public void IsReadOnly()
+  {
     var map = new Map<string, int>();
     map.IsReadOnly.ShouldBe(false);
   }
 
   [Fact]
-  public void Count() {
+  public void Count()
+  {
     var map = new Map<string, int>();
     map.Count.ShouldBe(0);
     map["a"] = 1;
@@ -53,8 +60,10 @@ public class MapTest {
   }
 
   [Fact]
-  public void Enumerator() {
-    var map = new Map<string, int> {
+  public void Enumerator()
+  {
+    var map = new Map<string, int>
+    {
       ["a"] = 1,
       ["b"] = 2
     };
@@ -71,8 +80,10 @@ public class MapTest {
   }
 
   [Fact]
-  public void Insert() {
-    var map = new Map<string, int> {
+  public void Insert()
+  {
+    var map = new Map<string, int>
+    {
       ["a"] = 1,
       ["b"] = 2
     };
@@ -82,8 +93,10 @@ public class MapTest {
   }
 
   [Fact]
-  public void RemoveAt() {
-    var map = new Map<string, int> {
+  public void RemoveAt()
+  {
+    var map = new Map<string, int>
+    {
       ["a"] = 1,
       ["b"] = 2
     };
@@ -92,7 +105,8 @@ public class MapTest {
   }
 
   [Fact]
-  public void CollectionInitializer() {
+  public void CollectionInitializer()
+  {
     var map = new Map<string, int> {
       { "a", 1 },
       { "b", 2 }
@@ -102,8 +116,10 @@ public class MapTest {
   }
 
   [Fact]
-  public void Clear() {
-    var map = new Map<string, int> {
+  public void Clear()
+  {
+    var map = new Map<string, int>
+    {
       ["a"] = 1,
       ["b"] = 2
     };
@@ -112,8 +128,10 @@ public class MapTest {
   }
 
   [Fact]
-  public void Remove() {
-    var map = new Map<string, int> {
+  public void Remove()
+  {
+    var map = new Map<string, int>
+    {
       ["a"] = 1,
       ["b"] = 2
     };
@@ -123,8 +141,10 @@ public class MapTest {
   }
 
   [Fact]
-  public void CopyTo() {
-    var map = new Map<string, int> {
+  public void CopyTo()
+  {
+    var map = new Map<string, int>
+    {
       ["a"] = 1,
       ["b"] = 2
     };
@@ -141,8 +161,10 @@ public class MapTest {
   }
 
   [Fact]
-  public void KeysAreOrdered() {
-    var map = new Map<string, int>() {
+  public void KeysAreOrdered()
+  {
+    var map = new Map<string, int>()
+    {
       ["b"] = 2,
       ["a"] = 1,
     };
@@ -156,8 +178,10 @@ public class MapTest {
   }
 
   [Fact]
-  public void Keys() {
-    var map = new Map<string, int> {
+  public void Keys()
+  {
+    var map = new Map<string, int>
+    {
       ["a"] = 1,
       ["b"] = 2
     };
@@ -170,8 +194,10 @@ public class MapTest {
   }
 
   [Fact]
-  public void Values() {
-    var map = new Map<string, int> {
+  public void Values()
+  {
+    var map = new Map<string, int>
+    {
       ["a"] = 1,
       ["b"] = 2
     };
@@ -195,8 +221,10 @@ public class MapTest {
   }
 
   [Fact]
-  public void ContainsKey() {
-    var map = new Map<string, int> {
+  public void ContainsKey()
+  {
+    var map = new Map<string, int>
+    {
       ["a"] = 1
     };
 
@@ -209,8 +237,10 @@ public class MapTest {
   }
 
   [Fact]
-  public void TryGetValue() {
-    var map = new Map<string, int> {
+  public void TryGetValue()
+  {
+    var map = new Map<string, int>
+    {
       ["a"] = 1
     };
 
@@ -222,8 +252,10 @@ public class MapTest {
   }
 
   [Fact]
-  public void Add() {
-    var map = new Map<string, int> {
+  public void Add()
+  {
+    var map = new Map<string, int>
+    {
       ["a"] = 1
     };
 
@@ -235,8 +267,10 @@ public class MapTest {
   }
 
   [Fact]
-  public void Contains() {
-    var map = new Map<string, int> {
+  public void Contains()
+  {
+    var map = new Map<string, int>
+    {
       ["a"] = 1
     };
 
@@ -245,7 +279,8 @@ public class MapTest {
   }
 
   [Fact]
-  public void CollectionSyntaxPreservesOrder() {
+  public void CollectionSyntaxPreservesOrder()
+  {
     var kvpList = new List<KeyValuePair<string, int>> {
       new("c", 3),
       new("b", 2),
@@ -264,8 +299,10 @@ public class MapTest {
   }
 
   [Fact]
-  public void TypeSafeEnumerator() {
-    var map = new Map<string, int>() {
+  public void TypeSafeEnumerator()
+  {
+    var map = new Map<string, int>()
+    {
       ["a"] = 1,
       ["b"] = 2,
       ["c"] = 3
@@ -273,13 +310,15 @@ public class MapTest {
 
     var kvpList = new List<KeyValuePair<string, int>>();
 
-    foreach (var kvp in map) {
+    foreach (var kvp in map)
+    {
       kvpList.Add(kvp);
     }
   }
 
   [Fact]
-  public void KvpConstructor() {
+  public void KvpConstructor()
+  {
     var kvpList = new List<KeyValuePair<string, int>> {
       new("c", 3),
       new("b", 2),

@@ -6,7 +6,8 @@ using System.Collections.Generic;
 /// Provides a readonly abstraction of a set.
 /// </summary>
 /// <typeparam name="T">The type of elements in the set.</typeparam>
-public interface IReadOnlySet<T> : IReadOnlyCollection<T> {
+public interface IReadOnlySet<T> : IReadOnlyCollection<T>
+{
   /// <summary>
   /// Determines whether the set contains the specified element.
   /// </summary>

@@ -2,22 +2,16 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "build",
-      "command": "dotnet",
-      "type": "process",
-      "args": [
-        "build",
-        "--no-restore"
-      ],
-      "problemMatcher": "$msCompile",
-      "presentation": {
-        "echo": true,
-        "reveal": "silent",
-        "focus": false,
-        "panel": "shared",
-        "showReuseMessage": false,
-        "clear": false
-      }
+        "label": "build",
+        "command": "dotnet",
+        "type": "process",
+        "args": [
+            "build",
+            "${workspaceFolder}/Chickensoft.Collections.Tests.sln",
+            "/property:GenerateFullPaths=true",
+            "/consoleloggerparameters:NoSummary;ForceNoAlign"
+        ],
+        "problemMatcher": "$msCompile"
     },
     {
       "label": "coverage",
@@ -35,6 +29,30 @@
         "showReuseMessage": false,
         "clear": true
       },
+    },
+    {
+        "label": "publish",
+        "command": "dotnet",
+        "type": "process",
+        "args": [
+            "publish",
+            "${workspaceFolder}/Chickensoft.Collections.Tests.sln",
+            "/property:GenerateFullPaths=true",
+            "/consoleloggerparameters:NoSummary;ForceNoAlign"
+        ],
+        "problemMatcher": "$msCompile"
+    },
+    {
+        "label": "watch",
+        "command": "dotnet",
+        "type": "process",
+        "args": [
+            "watch",
+            "run",
+            "--project",
+            "${workspaceFolder}/Chickensoft.Collections.Tests.sln"
+        ],
+        "problemMatcher": "$msCompile"
     }
   ]
 }

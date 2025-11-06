@@ -6,7 +6,8 @@ namespace Chickensoft.Collections;
 /// excess memory allocations. Pooled objects are "reset" whenever they are
 /// returned to the pool so that they can be reused.
 /// </summary>
-public interface IPooled {
+public interface IPooled
+{
   /// <summary>Resets the object to its default state.</summary>
   void Reset();
 }

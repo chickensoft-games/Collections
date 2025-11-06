@@ -17,7 +17,8 @@ using System.Diagnostics.CodeAnalysis;
 public sealed class LinkedHashMap<TKey, TValue> :
     ICollection<KeyValuePair<TKey, TValue>>,
     IDictionary<TKey, TValue>,
-    IReadOnlyDictionary<TKey, TValue> where TKey : notnull {
+    IReadOnlyDictionary<TKey, TValue> where TKey : notnull
+{
   private readonly LinkedList<KeyValuePair<TKey, TValue>> _list;
   private readonly Dictionary<
     TKey, LinkedListNode<KeyValuePair<TKey, TValue>>
@@ -26,10 +27,13 @@ public sealed class LinkedHashMap<TKey, TValue> :
   private int _version;
 
   /// <summary>Comparer used for key equality checks.</summary>
-  public IEqualityComparer<TKey> Comparer {
+  public IEqualityComparer<TKey> Comparer
+  {
     get => _comparer.Comparer;
-    set {
-      if (Count > 0) {
+    set
+    {
+      if (Count > 0)
+      {
         throw new InvalidOperationException(
           "Cannot change a comparer when the map is not empty."
         );
@@ -56,7 +60,8 @@ public sealed class LinkedHashMap<TKey, TValue> :
   public LinkedHashMap(
     int capacity = 0,
     IEqualityComparer<TKey>? comparer = null
-  ) {
+  )
+  {
     _comparer = new ForwardingComparer<TKey>(
       comparer ?? EqualityComparer<TKey>.Default
     );
@@ -80,14 +85,18 @@ public sealed class LinkedHashMap<TKey, TValue> :
     IEnumerable<KeyValuePair<TKey, TValue>>? collection = null,
     int capacity = 0,
     IEqualityComparer<TKey>? comparer = null
-  ) : this(capacity, comparer) {
-    if (collection is ICollection<KeyValuePair<TKey, TValue>> o1) {
+  ) : this(capacity, comparer)
+  {
+    if (collection is ICollection<KeyValuePair<TKey, TValue>> o1)
+    {
       _map.EnsureCapacity(o1.Count);
     }
 
-    if (collection is null) { return; }
+    if (collection is null)
+    { return; }
 
-    foreach (var kvp in collection) {
+    foreach (var kvp in collection)
+    {
       Add(kvp);
     }
   }
@@ -99,19 +108,25 @@ public sealed class LinkedHashMap<TKey, TValue> :
   /// <param name="key">Key.</param>
   /// <returns>Value for the specified key.</returns>
   /// <exception cref="KeyNotFoundException" />
-  public TValue this[TKey key] {
-    get {
-      if (_map.TryGetValue(key, out var node)) {
+  public TValue this[TKey key]
+  {
+    get
+    {
+      if (_map.TryGetValue(key, out var node))
+      {
         return node.Value.Value;
       }
       throw new KeyNotFoundException($"Key '{key}' not found in the map.");
     }
-    set {
+    set
+    {
       _version++;
-      if (_map.TryGetValue(key, out var node)) {
+      if (_map.TryGetValue(key, out var node))
+      {
         node.Value = new KeyValuePair<TKey, TValue>(key, value);
       }
-      else {
+      else
+      {
         var kvp = new KeyValuePair<TKey, TValue>(key, value);
         node = _list.AddLast(kvp);
         _map[key] = node;
@@ -120,10 +135,10 @@ public sealed class LinkedHashMap<TKey, TValue> :
   }
 
   /// <summary>Key enumerator.</summary>
-  public KeyEnumerator Keys => new KeyEnumerator(this, _list);
+  public KeyEnumerator Keys => new(this, _list);
 
   /// <summary>Value enumerator.</summary>
-  public ValueEnumerator Values => new ValueEnumerator(this, _list);
+  public ValueEnumerator Values => new(this, _list);
 
   /// <inheritdoc />
   public int Count => _map.Count;
@@ -165,8 +180,10 @@ public sealed class LinkedHashMap<TKey, TValue> :
   /// <param name="key">Key.</param>
   /// <param name="value">Value.</param>
   /// <exception cref="ArgumentException" />
-  public void Add(TKey key, TValue value) {
-    if (_map.ContainsKey(key)) {
+  public void Add(TKey key, TValue value)
+  {
+    if (_map.ContainsKey(key))
+    {
       throw new ArgumentException(
         "An item with the same key has already been added.", nameof(key)
       );
@@ -179,8 +196,10 @@ public sealed class LinkedHashMap<TKey, TValue> :
   }
 
   /// <inheritdoc />
-  public void Add(KeyValuePair<TKey, TValue> item) {
-    if (_map.ContainsKey(item.Key)) {
+  public void Add(KeyValuePair<TKey, TValue> item)
+  {
+    if (_map.ContainsKey(item.Key))
+    {
       throw new ArgumentException(
         "An item with the same key has already been added.", nameof(item)
       );
@@ -192,15 +211,18 @@ public sealed class LinkedHashMap<TKey, TValue> :
   }
 
   /// <inheritdoc />
-  public void Clear() {
+  public void Clear()
+  {
     _version++;
     _list.Clear();
     _map.Clear();
   }
 
   /// <inheritdoc />
-  public bool Contains(KeyValuePair<TKey, TValue> item) {
-    if (_map.TryGetValue(item.Key, out var node)) {
+  public bool Contains(KeyValuePair<TKey, TValue> item)
+  {
+    if (_map.TryGetValue(item.Key, out var node))
+    {
       // standard .NET dictionary uses default equality comparer for values
       return EqualityComparer<TValue>.Default.Equals(
         node.Value.Value, item.Value
@@ -228,15 +250,17 @@ public sealed class LinkedHashMap<TKey, TValue> :
   /// Struct enumerator for efficient enumeration of the dictionary.
   /// </summary>
   /// <returns>Struct enumerator.</returns>
-  public Enumerator GetEnumerator() => new Enumerator(this, _list);
+  public Enumerator GetEnumerator() => new(this, _list);
 
   /// <summary>
   /// Removes the specified key from the dictionary.
   /// </summary>
   /// <param name="key">Key to remove.</param>
   /// <returns>True if the key was present and removed.</returns>
-  public bool Remove(TKey key) {
-    if (!_map.TryGetValue(key, out var node)) {
+  public bool Remove(TKey key)
+  {
+    if (!_map.TryGetValue(key, out var node))
+    {
       return false;
     }
 
@@ -253,8 +277,10 @@ public sealed class LinkedHashMap<TKey, TValue> :
   /// <param name="value">Value associated with the removed key, if found.
   /// </param>
   /// <returns>True if the key was present and removed.</returns>
-  public bool Remove(TKey key, [MaybeNullWhen(false)] out TValue value) {
-    if (!_map.TryGetValue(key, out var node)) {
+  public bool Remove(TKey key, [MaybeNullWhen(false)] out TValue value)
+  {
+    if (!_map.TryGetValue(key, out var node))
+    {
       value = default;
       return false;
     }
@@ -271,15 +297,18 @@ public sealed class LinkedHashMap<TKey, TValue> :
   /// </summary>
   /// <param name="item">Key-value pair to remove.</param>
   /// <returns>True if the pair was present and removed.</returns>
-  public bool Remove(KeyValuePair<TKey, TValue> item) {
-    if (!_map.TryGetValue(item.Key, out var node)) {
+  public bool Remove(KeyValuePair<TKey, TValue> item)
+  {
+    if (!_map.TryGetValue(item.Key, out var node))
+    {
       return false;
     }
 
     // standard .NET dictionary uses default equality comparer for values
     if (!EqualityComparer<TValue>.Default.Equals(
       node.Value.Value, item.Value
-    )) {
+    ))
+    {
       return false;
     }
 
@@ -302,8 +331,10 @@ public sealed class LinkedHashMap<TKey, TValue> :
   public bool TryGetValue(TKey key,
     [MaybeNullWhen(false)]
     out TValue value
-  ) {
-    if (_map.TryGetValue(key, out var node)) {
+  )
+  {
+    if (_map.TryGetValue(key, out var node))
+    {
       value = node.Value.Value;
       return true;
     }
@@ -316,7 +347,8 @@ public sealed class LinkedHashMap<TKey, TValue> :
   /// <summary>
   /// Struct enumerator for iterating over the keys in the dictionary.
   /// </summary>
-  public struct KeyEnumerator : IEnumerator<TKey> {
+  public struct KeyEnumerator : IEnumerator<TKey>
+  {
     private readonly LinkedHashMap<TKey, TValue> _owner;
     private readonly int _version;
     private LinkedListNode<KeyValuePair<TKey, TValue>>? _current;
@@ -325,7 +357,8 @@ public sealed class LinkedHashMap<TKey, TValue> :
     internal KeyEnumerator(
       LinkedHashMap<TKey, TValue> owner,
       LinkedList<KeyValuePair<TKey, TValue>> list
-    ) {
+    )
+    {
       _owner = owner;
       _version = owner._version;
       _list = list;
@@ -336,10 +369,12 @@ public sealed class LinkedHashMap<TKey, TValue> :
     /// Converts the keys in the dictionary to an array.
     /// </summary>
     /// <returns>An array of keys.</returns>
-    public readonly TKey[] ToArray() {
+    public readonly TKey[] ToArray()
+    {
       var array = new TKey[_list.Count];
       var index = 0;
-      foreach (var kvp in _list) {
+      foreach (var kvp in _list)
+      {
         array[index++] = kvp.Key;
       }
       return array;
@@ -349,9 +384,11 @@ public sealed class LinkedHashMap<TKey, TValue> :
     /// Converts the keys in the dictionary to a list.
     /// </summary>
     /// <returns>A list of keys.</returns>
-    public readonly List<TKey> ToList() {
+    public readonly List<TKey> ToList()
+    {
       var list = new List<TKey>(_list.Count);
-      foreach (var kvp in _list) {
+      foreach (var kvp in _list)
+      {
         list.Add(kvp.Key);
       }
       return list;
@@ -377,8 +414,10 @@ public sealed class LinkedHashMap<TKey, TValue> :
     public void Dispose() => Reset();
 
     /// <inheritdoc />
-    public bool MoveNext() {
-      if (_owner._version != _version) {
+    public bool MoveNext()
+    {
+      if (_owner._version != _version)
+      {
         throw new InvalidOperationException(
           "LinkedHashMap was modified during enumeration."
         );
@@ -389,15 +428,14 @@ public sealed class LinkedHashMap<TKey, TValue> :
     }
 
     /// <inheritdoc />
-    public void Reset() {
-      _current = null;
-    }
+    public void Reset() => _current = null;
   }
 
   /// <summary>
   /// Struct enumerator for iterating over the values in the dictionary.
   /// </summary>
-  public struct ValueEnumerator : IEnumerator<TValue> {
+  public struct ValueEnumerator : IEnumerator<TValue>
+  {
     private readonly LinkedHashMap<TKey, TValue> _owner;
     private readonly int _version;
     private LinkedListNode<KeyValuePair<TKey, TValue>>? _current;
@@ -406,7 +444,8 @@ public sealed class LinkedHashMap<TKey, TValue> :
     internal ValueEnumerator(
       LinkedHashMap<TKey, TValue> owner,
       LinkedList<KeyValuePair<TKey, TValue>> list
-    ) {
+    )
+    {
       _owner = owner;
       _version = owner._version;
       _list = list;
@@ -417,10 +456,12 @@ public sealed class LinkedHashMap<TKey, TValue> :
     /// Converts the values in the dictionary to an array.
     /// </summary>
     /// <returns>An array of values.</returns>
-    public readonly TValue[] ToArray() {
+    public readonly TValue[] ToArray()
+    {
       var array = new TValue[_list.Count];
       var index = 0;
-      foreach (var kvp in _list) {
+      foreach (var kvp in _list)
+      {
         array[index++] = kvp.Value;
       }
       return array;
@@ -430,9 +471,11 @@ public sealed class LinkedHashMap<TKey, TValue> :
     /// Converts the values in the dictionary to a list.
     /// </summary>
     /// <returns>A list of values.</returns>
-    public readonly List<TValue> ToList() {
+    public readonly List<TValue> ToList()
+    {
       var list = new List<TValue>(_list.Count);
-      foreach (var kvp in _list) {
+      foreach (var kvp in _list)
+      {
         list.Add(kvp.Value);
       }
       return list;
@@ -455,8 +498,10 @@ public sealed class LinkedHashMap<TKey, TValue> :
     public void Dispose() => Reset();
 
     /// <inheritdoc />
-    public bool MoveNext() {
-      if (_owner._version != _version) {
+    public bool MoveNext()
+    {
+      if (_owner._version != _version)
+      {
         throw new InvalidOperationException(
           "LinkedHashMap was modified during enumeration."
         );
@@ -467,16 +512,15 @@ public sealed class LinkedHashMap<TKey, TValue> :
     }
 
     /// <inheritdoc />
-    public void Reset() {
-      _current = null;
-    }
+    public void Reset() => _current = null;
   }
 
   /// <summary>
   /// Struct enumerator for iterating over key-value pairs in the dictionary.
   /// </summary>
 
-  public struct Enumerator : IEnumerator<KeyValuePair<TKey, TValue>> {
+  public struct Enumerator : IEnumerator<KeyValuePair<TKey, TValue>>
+  {
     private readonly LinkedHashMap<TKey, TValue> _owner;
     private readonly int _version;
     private LinkedListNode<KeyValuePair<TKey, TValue>>? _current;
@@ -485,7 +529,8 @@ public sealed class LinkedHashMap<TKey, TValue> :
     internal Enumerator(
       LinkedHashMap<TKey, TValue> owner,
       LinkedList<KeyValuePair<TKey, TValue>> list
-    ) {
+    )
+    {
       _owner = owner;
       _version = owner._version;
       _list = list;
@@ -496,7 +541,8 @@ public sealed class LinkedHashMap<TKey, TValue> :
     /// Converts the key-value pairs in the dictionary to an array.
     /// </summary>
     /// <returns>An array of key-value pairs.</returns>
-    public readonly KeyValuePair<TKey, TValue>[] ToArray() {
+    public readonly KeyValuePair<TKey, TValue>[] ToArray()
+    {
       var array = new KeyValuePair<TKey, TValue>[_list.Count];
       _list.CopyTo(array, 0);
       return array;
@@ -506,9 +552,11 @@ public sealed class LinkedHashMap<TKey, TValue> :
     /// Converts the key-value pairs in the dictionary to a list.
     /// </summary>
     /// <returns>A list of key-value pairs.</returns>
-    public readonly List<KeyValuePair<TKey, TValue>> ToList() {
+    public readonly List<KeyValuePair<TKey, TValue>> ToList()
+    {
       var list = new List<KeyValuePair<TKey, TValue>>(_list.Count);
-      foreach (var kvp in _list) {
+      foreach (var kvp in _list)
+      {
         list.Add(kvp);
       }
       return list;
@@ -529,8 +577,10 @@ public sealed class LinkedHashMap<TKey, TValue> :
     public void Dispose() => Reset();
 
     /// <inheritdoc />
-    public bool MoveNext() {
-      if (_owner._version != _version) {
+    public bool MoveNext()
+    {
+      if (_owner._version != _version)
+      {
         throw new InvalidOperationException(
           "LinkedHashMap was modified during enumeration."
         );
@@ -541,8 +591,6 @@ public sealed class LinkedHashMap<TKey, TValue> :
     }
 
     /// <inheritdoc />
-    public void Reset() {
-      _current = null;
-    }
+    public void Reset() => _current = null;
   }
 }

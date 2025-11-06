@@ -5,9 +5,11 @@ using System.Data;
 using Shouldly;
 using Xunit;
 
-public class BlackboardTest {
+public class BlackboardTest
+{
   [Fact]
-  public void SetsAndGetsData() {
+  public void SetsAndGetsData()
+  {
     var blackboard = new Blackboard();
     blackboard.Has<string>().ShouldBeFalse();
     blackboard.HasObject(typeof(string)).ShouldBeFalse();

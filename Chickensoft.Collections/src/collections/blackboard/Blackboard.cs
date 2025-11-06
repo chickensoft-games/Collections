@@ -6,7 +6,8 @@ using System.Data;
 using System.Runtime.CompilerServices;
 
 /// <summary><inheritdoc cref="IBlackboard" /></summary>
-public class Blackboard : IBlackboard {
+public class Blackboard : IBlackboard
+{
   /// <summary>Blackboard data storage.</summary>
   protected readonly Dictionary<Type, object> _blackboard = [];
   /// <summary>Type of objects present in the blackboard.</summary>
@@ -20,7 +21,8 @@ public class Blackboard : IBlackboard {
   #region IReadOnlyBlackboard
   /// <inheritdoc />
   [MethodImpl(MethodImplOptions.AggressiveInlining)]
-  public TData Get<TData>() where TData : class {
+  public TData Get<TData>() where TData : class
+  {
     var type = typeof(TData);
     return (TData)GetBlackboardData(type);
   }
@@ -44,7 +46,8 @@ public class Blackboard : IBlackboard {
 
   /// <inheritdoc />
   [MethodImpl(MethodImplOptions.AggressiveInlining)]
-  public void Set<TData>(TData data) where TData : class {
+  public void Set<TData>(TData data) where TData : class
+  {
     var type = typeof(TData);
     _types.Add(type);
     SetBlackboardData(type, data);
@@ -52,13 +55,15 @@ public class Blackboard : IBlackboard {
 
   /// <inheritdoc />
   [MethodImpl(MethodImplOptions.AggressiveInlining)]
-  public void SetObject(Type type, object data) {
+  public void SetObject(Type type, object data)
+  {
     _types.Add(type);
     SetBlackboardData(type, data);
   }
 
   /// <inheritdoc />
-  public void Overwrite<TData>(TData data) where TData : class {
+  public void Overwrite<TData>(TData data) where TData : class
+  {
     var type = typeof(TData);
     _types.Add(type);
     OverwriteBlackboardData(type, data);
@@ -66,7 +71,8 @@ public class Blackboard : IBlackboard {
 
   /// <inheritdoc />
   [MethodImpl(MethodImplOptions.AggressiveInlining)]
-  public void OverwriteObject(Type type, object data) {
+  public void OverwriteObject(Type type, object data)
+  {
     _types.Add(type);
     OverwriteBlackboardData(type, data);
   }
@@ -93,8 +99,10 @@ public class Blackboard : IBlackboard {
   /// <param name="data">Blackboard data.</param>
   /// <exception cref="DuplicateNameException" />
   [MethodImpl(MethodImplOptions.AggressiveInlining)]
-  protected virtual void SetBlackboardData(Type type, object data) {
-    if (!_blackboard.TryAdd(type, data)) {
+  protected virtual void SetBlackboardData(Type type, object data)
+  {
+    if (!_blackboard.TryAdd(type, data))
+    {
       throw new DuplicateNameException(
         $"Data of type {type} already exists in the blackboard."
       );

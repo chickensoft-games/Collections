@@ -7,9 +7,11 @@ using System.Linq;
 using Shouldly;
 using Xunit;
 
-public class LinkedHashMapTest {
+public class LinkedHashMapTest
+{
   [Fact]
-  public void Initializes() {
+  public void Initializes()
+  {
     var map = new LinkedHashMap<string, string>();
 
     map.ShouldBeOfType<LinkedHashMap<string, string>>();
@@ -18,15 +20,18 @@ public class LinkedHashMapTest {
   }
 
   [Fact]
-  public void InitializesWithNullItems() {
+  public void InitializesWithNullItems()
+  {
     var map = new LinkedHashMap<string, string>(null);
 
     map.Count.ShouldBe(0);
   }
 
   [Fact]
-  public void GetsAndSetsKeys() {
-    var map = new LinkedHashMap<string, int> {
+  public void GetsAndSetsKeys()
+  {
+    var map = new LinkedHashMap<string, int>
+    {
       ["a"] = 1
     };
     map["a"].ShouldBe(1);
@@ -35,13 +40,15 @@ public class LinkedHashMapTest {
   }
 
   [Fact]
-  public void IsReadOnly() {
+  public void IsReadOnly()
+  {
     var map = new LinkedHashMap<string, int>();
     map.IsReadOnly.ShouldBe(false);
   }
 
   [Fact]
-  public void Count() {
+  public void Count()
+  {
     var map = new LinkedHashMap<string, int>();
     map.Count.ShouldBe(0);
     map["a"] = 1;
@@ -55,8 +62,10 @@ public class LinkedHashMapTest {
   }
 
   [Fact]
-  public void Enumerator() {
-    var map = new LinkedHashMap<string, int> {
+  public void Enumerator()
+  {
+    var map = new LinkedHashMap<string, int>
+    {
       ["a"] = 1,
       ["b"] = 2
     };
@@ -74,7 +83,8 @@ public class LinkedHashMapTest {
 
 
   [Fact]
-  public void CollectionInitializer() {
+  public void CollectionInitializer()
+  {
     var map = new LinkedHashMap<string, int> {
       { "a", 1 },
       { "b", 2 }
@@ -84,8 +94,10 @@ public class LinkedHashMapTest {
   }
 
   [Fact]
-  public void Clear() {
-    var map = new LinkedHashMap<string, int> {
+  public void Clear()
+  {
+    var map = new LinkedHashMap<string, int>
+    {
       ["a"] = 1,
       ["b"] = 2
     };
@@ -94,8 +106,10 @@ public class LinkedHashMapTest {
   }
 
   [Fact]
-  public void Remove() {
-    var map = new LinkedHashMap<string, int> {
+  public void Remove()
+  {
+    var map = new LinkedHashMap<string, int>
+    {
       ["a"] = 1,
       ["b"] = 2,
       ["c"] = 3
@@ -109,8 +123,10 @@ public class LinkedHashMapTest {
   }
 
   [Fact]
-  public void CopyTo() {
-    var map = new LinkedHashMap<string, int> {
+  public void CopyTo()
+  {
+    var map = new LinkedHashMap<string, int>
+    {
       ["a"] = 1,
       ["b"] = 2
     };
@@ -127,8 +143,10 @@ public class LinkedHashMapTest {
   }
 
   [Fact]
-  public void KeysAreOrdered() {
-    var map = new LinkedHashMap<string, int>() {
+  public void KeysAreOrdered()
+  {
+    var map = new LinkedHashMap<string, int>()
+    {
       ["b"] = 2,
       ["a"] = 1,
     };
@@ -140,8 +158,10 @@ public class LinkedHashMapTest {
   }
 
   [Fact]
-  public void Keys() {
-    var map = new LinkedHashMap<string, int> {
+  public void Keys()
+  {
+    var map = new LinkedHashMap<string, int>
+    {
       ["a"] = 1,
       ["b"] = 2
     };
@@ -154,8 +174,10 @@ public class LinkedHashMapTest {
   }
 
   [Fact]
-  public void Values() {
-    var map = new LinkedHashMap<string, int> {
+  public void Values()
+  {
+    var map = new LinkedHashMap<string, int>
+    {
       ["a"] = 1,
       ["b"] = 2
     };
@@ -169,8 +191,10 @@ public class LinkedHashMapTest {
   }
 
   [Fact]
-  public void ContainsKey() {
-    var map = new LinkedHashMap<string, int> {
+  public void ContainsKey()
+  {
+    var map = new LinkedHashMap<string, int>
+    {
       ["a"] = 1
     };
 
@@ -183,8 +207,10 @@ public class LinkedHashMapTest {
   }
 
   [Fact]
-  public void TryGetValue() {
-    var map = new LinkedHashMap<string, int> {
+  public void TryGetValue()
+  {
+    var map = new LinkedHashMap<string, int>
+    {
       ["a"] = 1
     };
 
@@ -196,8 +222,10 @@ public class LinkedHashMapTest {
   }
 
   [Fact]
-  public void Add() {
-    var map = new LinkedHashMap<string, int> {
+  public void Add()
+  {
+    var map = new LinkedHashMap<string, int>
+    {
       ["a"] = 1
     };
 
@@ -209,8 +237,10 @@ public class LinkedHashMapTest {
   }
 
   [Fact]
-  public void Contains() {
-    var map = new LinkedHashMap<string, int> {
+  public void Contains()
+  {
+    var map = new LinkedHashMap<string, int>
+    {
       ["a"] = 1
     };
 
@@ -219,7 +249,8 @@ public class LinkedHashMapTest {
   }
 
   [Fact]
-  public void CollectionSyntaxPreservesOrder() {
+  public void CollectionSyntaxPreservesOrder()
+  {
     var kvpList = new List<KeyValuePair<string, int>> {
       new("c", 3),
       new("b", 2),
@@ -238,8 +269,10 @@ public class LinkedHashMapTest {
   }
 
   [Fact]
-  public void TypeSafeEnumerator() {
-    var map = new LinkedHashMap<string, int>() {
+  public void TypeSafeEnumerator()
+  {
+    var map = new LinkedHashMap<string, int>()
+    {
       ["a"] = 1,
       ["b"] = 2,
       ["c"] = 3
@@ -247,13 +280,15 @@ public class LinkedHashMapTest {
 
     var kvpList = new List<KeyValuePair<string, int>>();
 
-    foreach (var kvp in map) {
+    foreach (var kvp in map)
+    {
       kvpList.Add(kvp);
     }
   }
 
   [Fact]
-  public void KvpConstructor() {
+  public void KvpConstructor()
+  {
     var kvpList = new List<KeyValuePair<string, int>> {
       new("c", 3),
       new("b", 2),
@@ -267,17 +302,21 @@ public class LinkedHashMapTest {
   }
 
   [Fact]
-  public void ThrowsIfKeyNotFoundFromIndexer() {
+  public void ThrowsIfKeyNotFoundFromIndexer()
+  {
     var map = new LinkedHashMap<string, int>();
 
-    Should.Throw<KeyNotFoundException>(() => {
+    Should.Throw<KeyNotFoundException>(() =>
+    {
       var value = map["a"];
     });
   }
 
   [Fact]
-  public void ThrowsWhenAddingDuplicateKey() {
-    var map = new LinkedHashMap<string, int> {
+  public void ThrowsWhenAddingDuplicateKey()
+  {
+    var map = new LinkedHashMap<string, int>
+    {
       ["a"] = 1
     };
 
@@ -289,9 +328,11 @@ public class LinkedHashMapTest {
   }
 
   [Fact]
-  public void EnumeratorAsIEnumerator() {
+  public void EnumeratorAsIEnumerator()
+  {
     IEnumerable<KeyValuePair<string, int>> map =
-      new LinkedHashMap<string, int> {
+      new LinkedHashMap<string, int>
+      {
         ["a"] = 1,
         ["b"] = 2
       };
@@ -305,9 +346,11 @@ public class LinkedHashMapTest {
   }
 
   [Fact]
-  public void ManualIEnumeratorEnumeration() {
+  public void ManualIEnumeratorEnumeration()
+  {
     IEnumerable<KeyValuePair<string, int>> map =
-      new LinkedHashMap<string, int> {
+      new LinkedHashMap<string, int>
+      {
         ["a"] = 1,
         ["b"] = 2
       };
@@ -327,8 +370,10 @@ public class LinkedHashMapTest {
   }
 
   [Fact]
-  public void RemoveKvpChecksEquality() {
-    var map = new LinkedHashMap<string, int> {
+  public void RemoveKvpChecksEquality()
+  {
+    var map = new LinkedHashMap<string, int>
+    {
       ["a"] = 1,
       ["b"] = 2
     };
@@ -343,8 +388,10 @@ public class LinkedHashMapTest {
   }
 
   [Fact]
-  public void StructEnumeration() {
-    var map = new LinkedHashMap<string, int> {
+  public void StructEnumeration()
+  {
+    var map = new LinkedHashMap<string, int>
+    {
       ["a"] = 1,
       ["b"] = 2,
       ["c"] = 3
@@ -352,7 +399,8 @@ public class LinkedHashMapTest {
 
     var keys = new List<string>();
 
-    foreach (var key in map.Keys) {
+    foreach (var key in map.Keys)
+    {
       keys.Add(key);
     }
 
@@ -360,7 +408,8 @@ public class LinkedHashMapTest {
 
     var values = new List<int>();
 
-    foreach (var value in map.Values) {
+    foreach (var value in map.Values)
+    {
       values.Add(value);
     }
 
@@ -368,7 +417,8 @@ public class LinkedHashMapTest {
 
     var items = new List<KeyValuePair<string, int>>();
 
-    foreach (var kvp in map) {
+    foreach (var kvp in map)
+    {
       items.Add(kvp);
     }
 
@@ -380,8 +430,10 @@ public class LinkedHashMapTest {
   }
 
   [Fact]
-  public void KeyEnumerationThrowsIfModified() {
-    var map = new LinkedHashMap<string, int> {
+  public void KeyEnumerationThrowsIfModified()
+  {
+    var map = new LinkedHashMap<string, int>
+    {
       ["a"] = 1,
       ["b"] = 2
     };
@@ -394,14 +446,17 @@ public class LinkedHashMapTest {
 
     map["c"] = 3; // modify the map
 
-    Should.Throw<InvalidOperationException>(() => {
+    Should.Throw<InvalidOperationException>(() =>
+    {
       enumerator.MoveNext();
     });
   }
 
   [Fact]
-  public void ValueEnumerationThrowsIfModified() {
-    var map = new LinkedHashMap<string, int> {
+  public void ValueEnumerationThrowsIfModified()
+  {
+    var map = new LinkedHashMap<string, int>
+    {
       ["a"] = 1,
       ["b"] = 2
     };
@@ -413,14 +468,17 @@ public class LinkedHashMapTest {
 
     map["c"] = 3; // modify the map
 
-    Should.Throw<InvalidOperationException>(() => {
+    Should.Throw<InvalidOperationException>(() =>
+    {
       enumerator.MoveNext();
     });
   }
 
   [Fact]
-  public void KeyValuePairEnumerationThrowsIfModified() {
-    var map = new LinkedHashMap<string, int> {
+  public void KeyValuePairEnumerationThrowsIfModified()
+  {
+    var map = new LinkedHashMap<string, int>
+    {
       ["a"] = 1,
       ["b"] = 2
     };
@@ -436,14 +494,17 @@ public class LinkedHashMapTest {
 
     map["c"] = 3; // modify the map
 
-    Should.Throw<InvalidOperationException>(() => {
+    Should.Throw<InvalidOperationException>(() =>
+    {
       enumerator.MoveNext();
     });
   }
 
   [Fact]
-  public void KeyValuePairToArrayAndList() {
-    var map = new LinkedHashMap<string, int> {
+  public void KeyValuePairToArrayAndList()
+  {
+    var map = new LinkedHashMap<string, int>
+    {
       ["a"] = 1,
       ["b"] = 2
     };
@@ -464,8 +525,10 @@ public class LinkedHashMapTest {
   }
 
   [Fact]
-  public void EnumeratorIsEnumerable() {
-    var map = new LinkedHashMap<string, int> {
+  public void EnumeratorIsEnumerable()
+  {
+    var map = new LinkedHashMap<string, int>
+    {
       ["a"] = 1,
       ["b"] = 2
     };
@@ -474,7 +537,8 @@ public class LinkedHashMapTest {
 
     var items = new List<KeyValuePair<string, int>>();
 
-    foreach (var item in enumerator) {
+    foreach (var item in enumerator)
+    {
       items.Add(item);
     }
 
@@ -485,18 +549,22 @@ public class LinkedHashMapTest {
   }
 
   [Fact]
-  public void ComparerSetThrowsWhenCollectionIsNonEmpty() {
-    var map = new LinkedHashMap<string, int> {
+  public void ComparerSetThrowsWhenCollectionIsNonEmpty()
+  {
+    var map = new LinkedHashMap<string, int>
+    {
       ["a"] = 1
     };
 
-    Should.Throw<InvalidOperationException>(() => {
+    Should.Throw<InvalidOperationException>(() =>
+    {
       map.Comparer = EqualityComparer<string>.Default;
     });
   }
 
   [Fact]
-  public void ComparerSetWorksWhenCollectionIsEmpty() {
+  public void ComparerSetWorksWhenCollectionIsEmpty()
+  {
     var map = new LinkedHashMap<string, int>();
 
     map.Count.ShouldBe(0);
@@ -507,8 +575,10 @@ public class LinkedHashMapTest {
   }
 
   [Fact]
-  public void IReadOnlyDictionaryKeysAndValues() {
-    IReadOnlyDictionary<string, int> map = new LinkedHashMap<string, int> {
+  public void IReadOnlyDictionaryKeysAndValues()
+  {
+    IReadOnlyDictionary<string, int> map = new LinkedHashMap<string, int>
+    {
       ["a"] = 1,
       ["b"] = 2
     };
@@ -518,8 +588,10 @@ public class LinkedHashMapTest {
   }
 
   [Fact]
-  public void ICollectionKeysAndValues() {
-    IDictionary<string, int> map = new LinkedHashMap<string, int> {
+  public void ICollectionKeysAndValues()
+  {
+    IDictionary<string, int> map = new LinkedHashMap<string, int>
+    {
       ["a"] = 1,
       ["b"] = 2
     };
