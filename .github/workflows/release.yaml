@@ -30,7 +30,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: 🧾 Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           token: ${{ secrets.GH_BASIC }}
           lfs: true
@@ -54,7 +54,7 @@ jobs:
           godot-version: global.json
           bump: ${{ inputs.bump }}
 
-      - uses: actions/setup-dotnet@v5
+      - uses: actions/setup-dotnet@v6
         name: 💽 Setup .NET SDK
         with:
           # Use the .NET SDK from global.json in the root of the repository.
