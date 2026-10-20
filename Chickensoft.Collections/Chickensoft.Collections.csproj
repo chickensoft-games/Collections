@@ -22,13 +22,13 @@
     <PackageId>Chickensoft.Collections</PackageId>
     <PackageReleaseNotes>Chickensoft.Collections release.</PackageReleaseNotes>
     <PackageIcon>icon.png</PackageIcon>
-    <PackageTags />
+    <PackageTags>collections;linked-hash-set;linked-hash-map;ordered-dictionary;object-pool;queue;godot</PackageTags>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
-    <PackageProjectUrl></PackageProjectUrl>
+    <PackageProjectUrl>https://github.com/chickensoft-games/Collections</PackageProjectUrl>
 
     <RepositoryType>git</RepositoryType>
-    <RepositoryUrl></RepositoryUrl>
+    <RepositoryUrl>https://github.com/chickensoft-games/Collections.git</RepositoryUrl>
   </PropertyGroup>
 
   <ItemGroup>
