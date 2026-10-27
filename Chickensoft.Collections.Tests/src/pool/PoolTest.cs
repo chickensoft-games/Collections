@@ -82,6 +82,20 @@ public class PoolTest
   }
 
   [Fact]
+  public void ReturnsItemsThatAreNotPooled()
+  {
+    var pool = new Pool<object>();
+
+    pool.Register<object>();
+
+    var item = pool.Get<object>();
+
+    pool.Return(item);
+
+    pool.Get<object>().ShouldBeSameAs(item);
+  }
+
+  [Fact]
   public void AllowsNullReturns()
   {
     var pool = new Pool<Shape>();

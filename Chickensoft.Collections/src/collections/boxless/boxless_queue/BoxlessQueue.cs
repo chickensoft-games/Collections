@@ -34,22 +34,22 @@ public class BoxlessQueue<TConformance>
   private abstract class TypedValueQueueBase
   {
     public abstract void HandleValue<THandler>(in THandler handler)
-        where THandler : struct, IBoxlessValueHandler<TConformance>;
+      where THandler : struct, IBoxlessValueHandler<TConformance>;
     public abstract bool Peek<THandler>(in THandler handler)
-        where THandler : struct, IBoxlessValueHandler<TConformance>;
+      where THandler : struct, IBoxlessValueHandler<TConformance>;
     public abstract void Discard();
     public abstract void Clear();
   }
 
   private class TypedValueQueue<T> : TypedValueQueueBase
-      where T : struct, TConformance
+    where T : struct, TConformance
   {
     private Queue<T>? _queue;
     private T? _single;
 
     public void Enqueue(in T value)
     {
-      if (_single.HasValue)
+      if (_single.HasValue || _queue?.Count > 0)
       {
         // only make a queue if we need to store more than one item
         // and we don't already have a queue
@@ -122,7 +122,7 @@ public class BoxlessQueue<TConformance>
   /// </summary>
   /// <typeparam name="TValue">The type of value to enqueue.</typeparam>
   public void Enqueue<TValue>(in TValue value)
-      where TValue : struct, TConformance
+    where TValue : struct, TConformance
   {
     TypedValueQueue<TValue> queue;
 
@@ -156,10 +156,12 @@ public class BoxlessQueue<TConformance>
   /// used, drastically reducing heap allocations.
   /// </param>
   public void Dequeue<THandler>(in THandler handler)
-      where THandler : struct, IBoxlessValueHandler<TConformance>
+    where THandler : struct, IBoxlessValueHandler<TConformance>
   {
     if (!HasValues)
-    { return; }
+    {
+      return;
+    }
     var type = _queueSelectorQueue.Dequeue();
     _queues[type].HandleValue(in handler);
   }
@@ -174,7 +176,9 @@ public class BoxlessQueue<TConformance>
   public void Discard(int count = 1)
   {
     if (count <= 0)
-    { return; }
+    {
+      return;
+    }
 
     while (count > 0 && HasValues)
     {
@@ -197,10 +201,12 @@ public class BoxlessQueue<TConformance>
   /// Whenever a value is peeked, this object will be invoked with the value.
   /// </param>
   public bool Peek<THandler>(in THandler handler)
-      where THandler : struct, IBoxlessValueHandler<TConformance>
+    where THandler : struct, IBoxlessValueHandler<TConformance>
   {
     if (!HasValues)
-    { return false; }
+    {
+      return false;
+    }
 
     var type = _queueSelectorQueue.Peek();
 
