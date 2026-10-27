@@ -28,6 +28,21 @@ public class LinkedHashMapTest
   }
 
   [Fact]
+  public void InitializesWithComparer()
+  {
+    var map = new LinkedHashMap<string, int>(
+      capacity: 0,
+      comparer: StringComparer.OrdinalIgnoreCase
+    )
+    {
+      ["a"] = 1
+    };
+
+    map.Comparer.ShouldBeSameAs(StringComparer.OrdinalIgnoreCase);
+    map["A"].ShouldBe(1);
+  }
+
+  [Fact]
   public void GetsAndSetsKeys()
   {
     var map = new LinkedHashMap<string, int>

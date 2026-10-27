@@ -11,10 +11,7 @@ public sealed class ReferenceComparer<T> : IEqualityComparer<T>
   /// <summary>
   /// Default comparer
   /// </summary>
-  public static ReferenceComparer<T> Default { get; } =
-    _instance ??= new ReferenceComparer<T>();
-
-  private static ReferenceComparer<T>? _instance;
+  public static ReferenceComparer<T> Default { get; } = new();
 
   /// <inheritdoc />
   public bool Equals(T x, T y) => ReferenceEquals(x, y);

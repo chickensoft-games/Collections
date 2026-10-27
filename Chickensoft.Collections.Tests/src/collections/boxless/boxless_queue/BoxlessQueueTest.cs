@@ -68,6 +68,35 @@ public class BoxlessQueueTests
   }
 
   [Fact]
+  public void PreservesOrderWhenEnqueueingAfterDequeueingSameType()
+  {
+    var handler = new TestValueHandler();
+    var queue = new BoxlessQueue();
+
+    queue.Enqueue(new ValueA(1));
+    queue.Enqueue(new ValueA(2));
+
+    queue.Dequeue(in handler);
+
+    queue.Enqueue(new ValueA(3));
+    queue.Enqueue(new ValueA(4));
+
+    queue.Peek(in handler).ShouldBeTrue();
+    handler.Values.ShouldBe([new ValueA(1), new ValueA(2)]);
+    handler.Values.Clear();
+
+    queue.Discard();
+    queue.Enqueue(new ValueA(5));
+
+    while (queue.HasValues)
+    {
+      queue.Dequeue(in handler);
+    }
+
+    handler.Values.ShouldBe([new ValueA(3), new ValueA(4), new ValueA(5)]);
+  }
+
+  [Fact]
   public void ClearQueue()
   {
     var queue = new BoxlessQueue();
